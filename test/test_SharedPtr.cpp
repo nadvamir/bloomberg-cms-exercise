@@ -12,7 +12,10 @@ class SharedPtr {
 public:
     SharedPtr(StoredType ptr) : ptr_(ptr) {
     }
+
     ReferenceType operator*() { return *ptr_; }
+
+    StoredType operator->() { return ptr_; }
 };
 
 TEST(ASharedPtr, ProvidesDereferenceOperator) {
@@ -21,4 +24,15 @@ TEST(ASharedPtr, ProvidesDereferenceOperator) {
     SharedPtr<int> pointer(realPtr);
 
     ASSERT_THAT(*pointer, Eq(42));
+}
+
+struct TestStruct {
+    int a;
+};
+TEST(ASharedPtr, ProvidesArrowOperator) {
+    TestStruct* p = new TestStruct;
+    p->a = 42;
+    SharedPtr<TestStruct> pointer(p);
+
+    ASSERT_THAT(pointer->a, Eq(42));
 }
