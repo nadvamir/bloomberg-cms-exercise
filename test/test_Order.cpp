@@ -6,11 +6,24 @@ using namespace std;
 
 class Order {
 public:
-    Order(const Commodity &c) {}
+    enum Side { Buy, Sell };
+
+private:
+    Side side_;
+
+    Order(Side s) : side_(s) {}
+
+public:
+    static Order buy() {
+        return Order(Buy);
+    }
+
+    Side side() const { return side_; }
 };
 
-TEST(AnOrder, IsCreatedForACommodity) {
-    Gold g;
-    Order subject(g);
+TEST(AnOrder, CanBeBought) {
+    Order order = Order::buy();
+
+    ASSERT_TRUE(order.side() == Order::Buy);
 }
 
