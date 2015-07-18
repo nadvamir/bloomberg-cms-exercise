@@ -29,3 +29,12 @@ TEST_F(ADealer, CanOnlyBeCreatedForSpecifiedCompanies) {
     ASSERT_NO_THROW({ Dealer("JPM"); });
     ASSERT_THROW(Dealer("MAXBANK"), UnknownDealer);
 }
+
+TEST_F(ADealer, StreamsItsId) {
+    Dealer jp("JPM");
+    stringstream ss;
+
+    ss << jp;
+
+    ASSERT_THAT(ss.str(), StrEq("JPM"));
+}
