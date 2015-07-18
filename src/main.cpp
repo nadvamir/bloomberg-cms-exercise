@@ -1,10 +1,9 @@
 #include <iostream>
-#include "include/example.h"
 
 using namespace std;
 
 int main(int argc, char **argv) {
-    cout << example() << endl;
+    cout << "hello world" << endl;
     return 0;
 }
 

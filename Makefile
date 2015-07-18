@@ -64,13 +64,13 @@ clean :
 	rm -f $(MAIN_NAME) $(TESTS) gmock.a gmock_main.a *.o
 
 ####### BUILD TARGETS ########################################
-OBJECTS = example.o
+OBJECTS = Dealer.o
 
-example.o: src/example.cpp include/example.h
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/example.cpp -o $@
+Dealer.o: src/Dealer.cpp include/Dealer.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Dealer.cpp -o $@
 
 # a file containing main()
-main.o: src/main.cpp include/example.h
+main.o: src/main.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/main.cpp -o $@
 
 main: $(OBJECTS) main.o

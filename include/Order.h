@@ -1,6 +1,10 @@
-#ifndef DEALER_H
-#define DEALER_H
+#ifndef ORDER_H
+#define ORDER_H
 
+#include <memory>
+
+#include "include/Dealer.h"
+#include "include/Commodity.h"
 #include "include/exceptions.h"
 
 class Order {
@@ -13,7 +17,8 @@ private:
     double price_;
 
 public:
-    Order(Side s, int q, double p)
+    Order(Dealer d, Side s,
+          std::auto_ptr<Commodity> c ,int q, double p)
     : side_(s), quantity_(q), price_(p) {
         if (q < 1 || p <= 0.0) {
             throw InvalidMessage();
