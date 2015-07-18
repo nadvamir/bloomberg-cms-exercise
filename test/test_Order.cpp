@@ -88,3 +88,11 @@ TEST_F(AnOrder, CanBeAssignedAnId) {
 
     ASSERT_THAT(order.id(), Eq(1));
 }
+
+TEST_F(AnOrder, CanBeAggressed) {
+    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+
+    order.aggress(50);
+
+    ASSERT_THAT(order.quantity(), Eq(quantity - 50));
+}

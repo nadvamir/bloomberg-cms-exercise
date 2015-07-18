@@ -35,6 +35,10 @@ public:
     int id() const { return id_; }
 
     void id(int i) { id_ = i; }
+
+    void aggress(int q) {
+        quantity_ -= q;
+    }
 };
 
 #endif
