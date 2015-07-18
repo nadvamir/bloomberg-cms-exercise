@@ -86,7 +86,8 @@ test_SharedPtr.o: $(TEST_DIR)/test_SharedPtr.cpp $(GMOCK_HEADERS) \
 
 test_OrderStore.o: $(TEST_DIR)/test_OrderStore.cpp \
 		$(GMOCK_HEADERS) include/Order.h include/exceptions.h \
-		include/Commodity.h include/Dealer.h 
+		include/Commodity.h include/Dealer.h \
+		include/SharedPtr.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_OrderStore.cpp -o $@
 
 
@@ -100,7 +101,7 @@ test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp \
 
 test_Order.o: $(TEST_DIR)/test_Order.cpp $(GMOCK_HEADERS) \
 		include/Order.h include/exceptions.h include/Commodity.h \
-		include/Dealer.h
+		include/Dealer.h include/SharedPtr.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Order.cpp -o $@
 
 tests.exe: $(TEST_OBJECTS) $(OBJECTS) gmock_main.a

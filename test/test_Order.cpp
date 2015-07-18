@@ -4,6 +4,7 @@
 #include "include/Dealer.h"
 #include "include/Order.h"
 #include "include/exceptions.h"
+#include "include/SharedPtr.h"
 
 using namespace testing;
 using namespace std;
