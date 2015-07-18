@@ -2,6 +2,8 @@
 
 #include "include/Commodity.h"
 
+#include <sstream>
+
 using namespace testing;
 using namespace std;
 
@@ -23,3 +25,12 @@ TEST_F(ACommodity, DifferentCommoditiesAreNotEqual) {
     ASSERT_THAT(test_compare(g, s), Eq(false));
 }
 
+TEST_F(ACommodity, PrintsItsNameToAStreamThroughAParentPointer) {
+    Gold g;
+    Commodity* p = &g;
+    stringstream ss;
+
+    ss << *p;
+
+    ASSERT_THAT(ss.str(), StrEq("GOLD"));
+}
