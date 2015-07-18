@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 
 #include "include/Dealer.h"
+#include "include/exceptions.h"
 
 #include <sstream>
 
@@ -24,3 +25,7 @@ TEST_F(ADealer, DealersFromDifferentCompaniesAreNotEqual) {
     ASSERT_THAT(test_compare(jp, barx), Eq(false));
 }
 
+TEST_F(ADealer, CanOnlyBeCreatedForSpecifiedCompanies) {
+    ASSERT_NO_THROW({ Dealer("JP"); });
+    ASSERT_THROW(Dealer("MAXBANK"), UnknownDealer);
+}
