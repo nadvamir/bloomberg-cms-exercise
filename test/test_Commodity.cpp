@@ -1,28 +1,9 @@
 #include "gmock/gmock.h"
 
+#include "include/Commodity.h"
+
 using namespace testing;
 using namespace std;
-
-class Gold;
-class Commodity {
-public:
-    virtual bool eq(const Gold&) const = 0;
-    virtual bool eq(const Commodity&) const { return false; }
-    virtual bool operator==(const Commodity& c) const {
-        return c.eq(*this);
-    }
-};
-
-class Gold : public Commodity {
-public:
-    bool eq(const Gold&) const { return true; }
-    bool operator==(const Commodity& c) const {
-        return c.eq(*this);
-    }
-};
-
-class Silver : public Commodity {
-};
 
 class ACommodity : public Test {
 public:
