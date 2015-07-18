@@ -5,7 +5,36 @@
 using namespace testing;
 using namespace std;
 
-TEST(ASharedPtr, ProvidesDereferenceOperator) {
+struct TestStruct {
+    int a;
+    static int constructionCount;
+    static int destructionCount;
+
+    static void reset() {
+        TestStruct::constructionCount = 0;
+        TestStruct::destructionCount = 0;
+    }
+
+    TestStruct(int val) : a(val) {
+        ++TestStruct::constructionCount;
+    }
+    TestStruct(const TestStruct& ts) {
+        ++TestStruct::constructionCount;
+        a = ts.a;
+    }
+};
+
+int TestStruct::constructionCount = 0;
+int TestStruct::destructionCount = 0;
+
+class ASharedPtr : public Test {
+public:
+    void SetUp() {
+        TestStruct::reset();
+    }
+};
+
+TEST_F(ASharedPtr, ProvidesDereferenceOperator) {
     int* realPtr = new int;
     *realPtr = 42;
     SharedPtr<int> pointer(realPtr);
@@ -13,13 +42,15 @@ TEST(ASharedPtr, ProvidesDereferenceOperator) {
     ASSERT_THAT(*pointer, Eq(42));
 }
 
-struct TestStruct {
-    int a;
-};
-TEST(ASharedPtr, ProvidesArrowOperator) {
-    TestStruct* p = new TestStruct;
-    p->a = 42;
-    SharedPtr<TestStruct> pointer(p);
+TEST_F(ASharedPtr, ProvidesArrowOperator) {
+    SharedPtr<TestStruct> pointer(new TestStruct(42));
 
     ASSERT_THAT(pointer->a, Eq(42));
+}
+
+TEST_F(ASharedPtr, DoesNotCopyTheUnderlyingObject) {
+    SharedPtr<TestStruct> pointer(new TestStruct(42));
+    SharedPtr<TestStruct> clone(pointer);
+
+    ASSERT_THAT(TestStruct::constructionCount, Eq(1));
 }
