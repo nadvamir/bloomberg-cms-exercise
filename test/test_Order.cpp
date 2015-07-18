@@ -102,3 +102,9 @@ TEST_F(AnOrder, CannotBeAggressedMoreThanItsQuantity) {
 
     ASSERT_THROW(order.aggress(quantity + 1), InvalidMessage);
 }
+
+TEST_F(AnOrder, IsNotFilledWhenCreated) {
+    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+
+    ASSERT_THAT(order.isFilled(), Eq(false));
+}

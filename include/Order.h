@@ -33,6 +33,7 @@ public:
     Side side() const { return side_; }
     int quantity() const { return quantity_; }
     int id() const { return id_; }
+    bool isFilled() const { return quantity_ == 0; }
 
     void id(int i) { id_ = i; }
 
