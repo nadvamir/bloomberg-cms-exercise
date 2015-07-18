@@ -15,7 +15,12 @@ public:
 };
 
 TEST_F(ADealer, DealersOfTheSameCompanyAreEqual) {
-    Dealer jp("JP"), barx("JP");
-    ASSERT_THAT(test_compare(jp, barx), Eq(true));
+    Dealer jp("JP"), jp2("JP");
+    ASSERT_THAT(test_compare(jp, jp2), Eq(true));
+}
+
+TEST_F(ADealer, DealersFromDifferentCompaniesAreNotEqual) {
+    Dealer jp("JP"), barx("BARX");
+    ASSERT_THAT(test_compare(jp, barx), Eq(false));
 }
 
