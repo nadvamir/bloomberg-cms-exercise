@@ -22,6 +22,7 @@ struct TestStruct {
         ++TestStruct::constructionCount;
         a = ts.a;
     }
+    ~TestStruct() { ++TestStruct::destructionCount; }
 };
 
 int TestStruct::constructionCount = 0;
@@ -53,4 +54,22 @@ TEST_F(ASharedPtr, DoesNotCopyTheUnderlyingObject) {
     SharedPtr<TestStruct> clone(pointer);
 
     ASSERT_THAT(TestStruct::constructionCount, Eq(1));
+}
+
+TEST_F(ASharedPtr, OnlyDestroysTheObjectOnce) {
+    {
+        SharedPtr<TestStruct> pointer(new TestStruct(42));
+        {
+            SharedPtr<TestStruct> clone(pointer);
+        }
+    }
+
+    ASSERT_THAT(TestStruct::destructionCount, Eq(1));
+}
+
+TEST_F(ASharedPtr, DestroysAPointeeIfAssignedNewOneAndWasLast) {
+    SharedPtr<TestStruct> pointer(new TestStruct(42));
+    pointer = SharedPtr<TestStruct>(new TestStruct(43));
+
+    ASSERT_THAT(TestStruct::destructionCount, Eq(1));
 }
