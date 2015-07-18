@@ -76,3 +76,9 @@ TEST_F(AnOrder, MustHaveAPositivePrice) {
                        commodity, quantity, -1.0),
                  InvalidMessage);
 }
+
+TEST_F(AnOrder, DoesNotHaveAnIdByDefault) {
+    Order order(dealer, Order::Buy, commodity, quantity, price);
+
+    ASSERT_THAT(order.id(), Eq(Order::NoID));
+}
