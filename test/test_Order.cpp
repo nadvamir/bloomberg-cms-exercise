@@ -11,28 +11,20 @@ public:
 private:
     Side side_;
 
-    Order(Side s) : side_(s) {}
-
 public:
-    static Order buy() {
-        return Order(Buy);
-    }
-
-    static Order sell() {
-        return Order(Sell);
-    }
+    Order(Side s) : side_(s) {}
 
     Side side() const { return side_; }
 };
 
 TEST(AnOrder, CanBeBought) {
-    Order order = Order::buy();
+    Order order(Order::Buy);
 
     ASSERT_TRUE(order.side() == Order::Buy);
 }
 
 TEST(AnOrder, CanBeSold) {
-    Order order = Order::sell();
+    Order order(Order::Sell);
 
     ASSERT_TRUE(order.side() == Order::Sell);
 }
