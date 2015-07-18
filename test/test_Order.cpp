@@ -82,3 +82,11 @@ TEST_F(AnOrder, DoesNotHaveAnIdByDefault) {
 
     ASSERT_THAT(order.id(), Eq(Order::NoID));
 }
+
+TEST_F(AnOrder, CanBeAssignedAnId) {
+    Order order(dealer, Order::Buy, commodity, quantity, price);
+
+    order.id(1);
+
+    ASSERT_THAT(order.id(), Eq(1));
+}

@@ -33,6 +33,8 @@ public:
     Side side() const { return side_; }
     int quantity() const { return quantity_; }
     int id() const { return id_; }
+
+    void id(int i) { id_ = i; }
 };
 
 #endif
