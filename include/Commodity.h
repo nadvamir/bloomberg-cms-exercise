@@ -10,7 +10,8 @@ public:
         return typeid(*this) == typeid(c);
     }
 
-    friend std::ostream& operator<<(std::ostream& o, const Commodity& c) {
+    friend std::ostream& operator<<(std::ostream& o, 
+                                    const Commodity& c) {
         o << c.getTag();
         return o;
     }
