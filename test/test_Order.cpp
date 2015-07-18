@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 
 #include "include/Commodity.h"
+#include "include/exceptions.h"
 
 using namespace testing;
 using namespace std;
@@ -15,7 +16,11 @@ private:
 
 public:
     Order(Side s, int q)
-    : side_(s), quantity_(q) {}
+    : side_(s), quantity_(q) {
+        if (q < 1) {
+            throw InvalidMessage();
+        }
+    }
 
     Side side() const { return side_; }
     int quantity() { return quantity_; }
@@ -38,4 +43,10 @@ TEST(AnOrder, HasRemainingQuantity) {
     Order order(Order::Sell, quantity);
 
     ASSERT_THAT(order.quantity(), Eq(quantity));
+}
+
+TEST(AnOrder, MustHaveAPositiveQuantity) {
+    ASSERT_NO_THROW(Order(Order::Sell, 1));
+    ASSERT_THROW(Order(Order::Sell, 0), InvalidMessage);
+    ASSERT_THROW(Order(Order::Sell, -1), InvalidMessage);
 }
