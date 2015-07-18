@@ -12,27 +12,30 @@ using namespace testing;
 using namespace std;
 
 class OrderStore {
-    typedef map<long, Order> OrderMap;
+    typedef map<long, OrderPtr> OrderMap;
     OrderMap store;
     
 public:
-//     long put(Order& order) {
-//         store.insert(make_pair(0, order));
-//         return 0;
-//     }
-// 
-//     Order& get(long id) {
-//         return store.find(id)->second;
-//     }
+    long put(OrderPtr& order) {
+        long id = 0;
+        order->id(id);
+        store.insert(make_pair(id, order));
+        return id;
+    }
+
+    OrderPtr& get(long id) {
+        return store.find(id)->second;
+    }
 };
 
-// TEST(AnOrderStore, StoresOrders) {
-//     OrderStore store;
-//     Order order(Dealer("JPM"), Order::Sell,
-//                 std::auto_ptr<Commodity> (new Gold),
-//                 100, 59.99);
-// 
-//     long id = store.put(order);
-// 
-//     ASSERT_THAT(store.get(id), Eq(order));
-// }
+TEST(AnOrderStore, StoresOrdersAttachingIdsToThem) {
+    OrderStore store;
+    OrderPtr order = OrderPtr(new Order(
+        Dealer("JPM"), Order::Sell,
+        CommodityPtr(new Gold),
+        100, 59.99));
+
+    long id = store.put(order);
+
+    ASSERT_THAT(store.get(id)->id(), Eq(id));
+}

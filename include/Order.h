@@ -6,6 +6,10 @@
 #include "include/exceptions.h"
 #include "include/SharedPtr.h"
 
+class Order;
+typedef SharedPtr<Order> OrderPtr;
+typedef SharedPtr<Commodity> CommodityPtr;
+
 class Order {
 public:
     enum Side { Buy, Sell };
@@ -14,14 +18,14 @@ public:
 private:
     int id_;
     Dealer dealer_;
-    SharedPtr<Commodity> commodity_;
+    CommodityPtr commodity_;
     Side side_;
     int quantity_;
     double price_;
 
 public:
     Order(Dealer d, Side s,
-          SharedPtr<Commodity> c ,int q, double p)
+          CommodityPtr c ,int q, double p)
     : id_(Order::NoID), dealer_(d), commodity_(c)
     , side_(s), quantity_(q), price_(p) {
         if (q < 1 || p <= 0.0) {
