@@ -17,3 +17,9 @@ TEST_F(ACommodity, CommoditiesOfTheSameTypeAreEqual) {
     ASSERT_THAT(test_compare(g1, g2), Eq(true));
 }
 
+TEST_F(ACommodity, DifferentCommoditiesAreNotEqual) {
+    Gold g;
+    Silver s;
+    ASSERT_THAT(test_compare(g, s), Eq(false));
+}
+

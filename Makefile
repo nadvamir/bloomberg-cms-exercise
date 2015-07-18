@@ -79,7 +79,7 @@ main: $(OBJECTS) main.o
 ####### TEST BUILD TARGETS ###################################
 TEST_OBJECTS = test_Order.o test_Commodity.o
 
-test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp $(GMOCK_HEADERS)
+test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp $(GMOCK_HEADERS) include/Commodity.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Commodity.cpp -o $@
 
 test_Order.o: $(TEST_DIR)/test_Order.cpp $(GMOCK_HEADERS)
