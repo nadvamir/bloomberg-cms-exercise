@@ -1,6 +1,8 @@
 #ifndef SHARED_PTR_H
 #define SHARED_PTR_H
 
+// This is the most basic implementation of a shared pointer
+// Not thead safe at this point in time
 template <class T>
 class SharedPtr {
     typedef T* StoredType;
