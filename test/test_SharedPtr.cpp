@@ -86,3 +86,9 @@ TEST_F(ASharedPtr, LeavesAPointeeIfAssignedNewOneAndWasNotLast) {
     ASSERT_THAT(TestStruct::destructionCount, Eq(0));
 }
 
+TEST_F(ASharedPtr, CanBeAssignedEvenIfItWasNull) {
+    ASSERT_NO_THROW({
+        SharedPtr<TestStruct> ptr;
+        ptr = SharedPtr<TestStruct>(new TestStruct(42));
+    });
+}
