@@ -13,6 +13,8 @@
 class Commodity {
     virtual const char* getTag() const = 0;
 public:
+    virtual ~Commodity() {}
+
     virtual bool operator==(const Commodity& c) const {
         return typeid(*this) == typeid(c);
     }

@@ -1,7 +1,5 @@
 #include "gmock/gmock.h"
 
-#include <memory>
-
 #include "include/Commodity.h"
 #include "include/Dealer.h"
 #include "include/Order.h"
@@ -14,12 +12,12 @@ class AnOrder : public Test {
 public:
     int quantity;
     double price;
-    auto_ptr<Commodity> commodity;
+    SharedPtr<Commodity> commodity;
 
     void SetUp() {
         quantity = 500;
         price = 1.0;
-        commodity.reset(new Gold());
+        commodity = SharedPtr<Commodity>(new Gold());
     }
 };
 
@@ -45,13 +43,9 @@ TEST_F(AnOrder, MustHaveAPositiveQuantity) {
     ASSERT_NO_THROW(Order(Dealer("JPM"), Order::Sell,
                           commodity, 1, price));
 
-    commodity.reset(new Gold());
-
     ASSERT_THROW(Order(Dealer("JPM"), Order::Sell,
                        commodity, 0, price),
                  InvalidMessage);
-
-    commodity.reset(new Gold());
 
     ASSERT_THROW(Order(Dealer("JPM"), Order::Sell,
                        commodity, -1, price),
@@ -62,13 +56,9 @@ TEST_F(AnOrder, MustHaveAPositivePrice) {
     ASSERT_NO_THROW(Order(Dealer("JPM"), Order::Sell,
                           commodity, quantity, 1.0));
 
-    commodity.reset(new Gold());
-
     ASSERT_THROW(Order(Dealer("JPM"), Order::Sell,
                        commodity, quantity, 0.0),
                  InvalidMessage);
-
-    commodity.reset(new Gold());
 
     ASSERT_THROW(Order(Dealer("JPM"), Order::Sell,
                        commodity, quantity, -1.0),
