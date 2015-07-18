@@ -14,11 +14,14 @@ public:
     int quantity;
     double price;
     SharedPtr<Commodity> commodity;
+    SharedPtr<Order> orderPtr;
 
     void SetUp() {
         quantity = 500;
         price = 1.0;
         commodity = SharedPtr<Commodity>(new Gold());
+        orderPtr = SharedPtr<Order>(new Order(
+            Dealer("JPM"), Order::Buy, commodity, quantity, price));
     }
 };
 
@@ -35,9 +38,7 @@ TEST_F(AnOrder, CanBeSold) {
 }
 
 TEST_F(AnOrder, HasRemainingQuantity) {
-    Order order(Dealer("JPM"), Order::Sell, commodity, quantity, price);
-
-    ASSERT_THAT(order.quantity(), Eq(quantity));
+    ASSERT_THAT(orderPtr->quantity(), Eq(quantity));
 }
 
 TEST_F(AnOrder, MustHaveAPositiveQuantity) {
@@ -67,43 +68,31 @@ TEST_F(AnOrder, MustHaveAPositivePrice) {
 }
 
 TEST_F(AnOrder, DoesNotHaveAnIdByDefault) {
-    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
-
-    ASSERT_THAT(order.id(), Eq(Order::NoID));
+    ASSERT_THAT(orderPtr->id(), Eq(Order::NoID));
 }
 
 TEST_F(AnOrder, CanBeAssignedAnId) {
-    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+    orderPtr->id(1);
 
-    order.id(1);
-
-    ASSERT_THAT(order.id(), Eq(1));
+    ASSERT_THAT(orderPtr->id(), Eq(1));
 }
 
 TEST_F(AnOrder, CanBeAggressed) {
-    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+    orderPtr->aggress(50);
 
-    order.aggress(50);
-
-    ASSERT_THAT(order.quantity(), Eq(quantity - 50));
+    ASSERT_THAT(orderPtr->quantity(), Eq(quantity - 50));
 }
 
 TEST_F(AnOrder, CannotBeAggressedMoreThanItsQuantity) {
-    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
-
-    ASSERT_THROW(order.aggress(quantity + 1), InvalidMessage);
+    ASSERT_THROW(orderPtr->aggress(quantity + 1), InvalidMessage);
 }
 
 TEST_F(AnOrder, IsNotFilledWhenCreated) {
-    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
-
-    ASSERT_THAT(order.isFilled(), Eq(false));
+    ASSERT_THAT(orderPtr->isFilled(), Eq(false));
 }
 
 TEST_F(AnOrder, IsFilledWhenAggressedInFull) {
-    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+    orderPtr->aggress(quantity);
 
-    order.aggress(quantity);
-
-    ASSERT_THAT(order.isFilled(), Eq(true));
+    ASSERT_THAT(orderPtr->isFilled(), Eq(true));
 }
