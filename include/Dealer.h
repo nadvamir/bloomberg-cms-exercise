@@ -12,7 +12,6 @@ class Dealer {
     static const std::string dealers_[];
     static const size_t numDealers_;
 public:
-    Dealer() {} // used for tests
     Dealer(std::string id) : id_(id) {
         if (find(Dealer::dealers_,
                  Dealer::dealers_ + numDealers_,
