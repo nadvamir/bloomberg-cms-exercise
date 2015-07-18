@@ -73,3 +73,12 @@ TEST_F(ASharedPtr, DestroysAPointeeIfAssignedNewOneAndWasLast) {
 
     ASSERT_THAT(TestStruct::destructionCount, Eq(1));
 }
+
+TEST_F(ASharedPtr, LeavesAPointeeIfAssignedNewOneAndWasNotLast) {
+    SharedPtr<TestStruct> pointer(new TestStruct(42));
+    SharedPtr<TestStruct> pointer2 = pointer;
+    pointer = SharedPtr<TestStruct>(new TestStruct(43));
+
+    ASSERT_THAT(TestStruct::destructionCount, Eq(0));
+}
+
