@@ -86,7 +86,8 @@ test_Dealer.o: $(TEST_DIR)/test_Dealer.cpp $(GMOCK_HEADERS) \
 test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp $(GMOCK_HEADERS) include/Commodity.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Commodity.cpp -o $@
 
-test_Order.o: $(TEST_DIR)/test_Order.cpp $(GMOCK_HEADERS)
+test_Order.o: $(TEST_DIR)/test_Order.cpp $(GMOCK_HEADERS) \
+	include/Order.h include/exceptions.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Order.cpp -o $@
 
 tests.exe: $(TEST_OBJECTS) $(OBJECTS) gmock_main.a

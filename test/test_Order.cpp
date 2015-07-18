@@ -1,30 +1,11 @@
 #include "gmock/gmock.h"
 
 #include "include/Commodity.h"
+#include "include/Order.h"
 #include "include/exceptions.h"
 
 using namespace testing;
 using namespace std;
-
-class Order {
-public:
-    enum Side { Buy, Sell };
-
-private:
-    Side side_;
-    int quantity_;
-
-public:
-    Order(Side s, int q)
-    : side_(s), quantity_(q) {
-        if (q < 1) {
-            throw InvalidMessage();
-        }
-    }
-
-    Side side() const { return side_; }
-    int quantity() { return quantity_; }
-};
 
 TEST(AnOrder, CanBeBought) {
     Order order(Order::Buy, 1);
