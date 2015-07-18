@@ -19,8 +19,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& o, 
                                     const Commodity& c) {
-        o << c.getTag();
-        return o;
+        return o << c.getTag();
     }
 };
 
