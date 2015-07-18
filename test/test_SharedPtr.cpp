@@ -35,6 +35,10 @@ public:
     }
 };
 
+TEST_F(ASharedPtr, IsNullByDefault) {
+    ASSERT_NO_THROW({ SharedPtr<int> ptr; });
+}
+
 TEST_F(ASharedPtr, ProvidesDereferenceOperator) {
     int* realPtr = new int;
     *realPtr = 42;

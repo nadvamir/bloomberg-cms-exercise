@@ -11,6 +11,8 @@ class SharedPtr {
     StoredType ptr_;
     int* refCount_;
 public:
+    SharedPtr() : ptr_(NULL), refCount_(NULL) {}
+
     explicit SharedPtr(StoredType ptr)
     : ptr_(ptr), refCount_(new int(1)) {}
 
@@ -20,8 +22,7 @@ public:
     }
 
     SharedPtr& operator=(const SharedPtr& sptr) {
-        --(*refCount_);
-        if (0 == *refCount_) {
+        if (NULL != refCount_ && 0 == --(*refCount_)) {
             delete ptr_;
             delete refCount_;
         }
@@ -34,8 +35,7 @@ public:
     }
 
     ~SharedPtr() {
-        --(*refCount_);
-        if (0 == *refCount_) {
+        if (NULL != refCount_ && 0 == --(*refCount_)) {
             delete ptr_;
             delete refCount_;
         }
