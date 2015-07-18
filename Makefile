@@ -80,7 +80,8 @@ main: $(OBJECTS) main.o
 TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
 			   test_OrderStore.o test_SharedPtr.o
 
-test_SharedPtr.o: $(TEST_DIR)/test_SharedPtr.cpp $(GMOCK_HEADERS)
+test_SharedPtr.o: $(TEST_DIR)/test_SharedPtr.cpp $(GMOCK_HEADERS) \
+		include/SharedPtr.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_SharedPtr.cpp -o $@
 
 test_OrderStore.o: $(TEST_DIR)/test_OrderStore.cpp \
