@@ -1,11 +1,8 @@
 #include "gmock/gmock.h"
 
-using namespace std;
+#include "include/Commodity.h"
 
-class Commodity {
-};
-class Gold : public Commodity {
-};
+using namespace std;
 
 class Order {
 public:
