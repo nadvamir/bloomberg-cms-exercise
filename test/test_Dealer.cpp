@@ -16,16 +16,16 @@ public:
 };
 
 TEST_F(ADealer, DealersOfTheSameCompanyAreEqual) {
-    Dealer jp("JP"), jp2("JP");
+    Dealer jp("JPM"), jp2("JPM");
     ASSERT_THAT(test_compare(jp, jp2), Eq(true));
 }
 
 TEST_F(ADealer, DealersFromDifferentCompaniesAreNotEqual) {
-    Dealer jp("JP"), barx("BARX");
+    Dealer jp("JPM"), barx("BARX");
     ASSERT_THAT(test_compare(jp, barx), Eq(false));
 }
 
 TEST_F(ADealer, CanOnlyBeCreatedForSpecifiedCompanies) {
-    ASSERT_NO_THROW({ Dealer("JP"); });
+    ASSERT_NO_THROW({ Dealer("JPM"); });
     ASSERT_THROW(Dealer("MAXBANK"), UnknownDealer);
 }
