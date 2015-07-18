@@ -96,3 +96,9 @@ TEST_F(AnOrder, CanBeAggressed) {
 
     ASSERT_THAT(order.quantity(), Eq(quantity - 50));
 }
+
+TEST_F(AnOrder, CannotBeAggressedMoreThanItsQuantity) {
+    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+
+    ASSERT_THROW(order.aggress(quantity + 1), InvalidMessage);
+}

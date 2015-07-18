@@ -37,6 +37,9 @@ public:
     void id(int i) { id_ = i; }
 
     void aggress(int q) {
+        if (q > quantity_) {
+            throw InvalidMessage();
+        }
         quantity_ -= q;
     }
 };
