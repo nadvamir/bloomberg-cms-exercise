@@ -77,17 +77,26 @@ main: $(OBJECTS) main.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $(MAIN_NAME)
 
 ####### TEST BUILD TARGETS ###################################
-TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o
+TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
+			   test_OrderStore.o
+
+test_OrderStore.o: $(TEST_DIR)/test_OrderStore.cpp \
+		$(GMOCK_HEADERS) include/Order.h include/exceptions.h \
+		include/Commodity.h include/Dealer.h 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_OrderStore.cpp -o $@
+
 
 test_Dealer.o: $(TEST_DIR)/test_Dealer.cpp $(GMOCK_HEADERS) \
 		include/Dealer.h include/exceptions.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Dealer.cpp -o $@
 
-test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp $(GMOCK_HEADERS) include/Commodity.h
+test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp \
+		$(GMOCK_HEADERS) include/Commodity.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Commodity.cpp -o $@
 
 test_Order.o: $(TEST_DIR)/test_Order.cpp $(GMOCK_HEADERS) \
-	include/Order.h include/exceptions.h
+		include/Order.h include/exceptions.h include/Commodity.h \
+		include/Dealer.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Order.cpp -o $@
 
 tests.exe: $(TEST_OBJECTS) $(OBJECTS) gmock_main.a

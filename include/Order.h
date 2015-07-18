@@ -30,6 +30,10 @@ public:
         }
     }
 
+    Order(Order& o)
+    : id_(o.id_), dealer_(o.dealer_), commodity_(o.commodity_)
+    , side_(o.side_), quantity_(o.quantity_), price_(o.price_) {}
+
     Side side() const { return side_; }
     int quantity() const { return quantity_; }
     int id() const { return id_; }
