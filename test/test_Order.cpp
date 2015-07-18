@@ -108,3 +108,11 @@ TEST_F(AnOrder, IsNotFilledWhenCreated) {
 
     ASSERT_THAT(order.isFilled(), Eq(false));
 }
+
+TEST_F(AnOrder, IsFilledWhenAggressedInFull) {
+    Order order(Dealer("JPM"), Order::Buy, commodity, quantity, price);
+
+    order.aggress(quantity);
+
+    ASSERT_THAT(order.isFilled(), Eq(true));
+}
