@@ -77,7 +77,10 @@ main: $(OBJECTS) main.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $(MAIN_NAME)
 
 ####### TEST BUILD TARGETS ###################################
-TEST_OBJECTS = test_Order.o test_Commodity.o
+TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o
+
+test_Dealer.o: $(TEST_DIR)/test_Dealer.cpp $(GMOCK_HEADERS) include/Dealer.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Dealer.cpp -o $@
 
 test_Commodity.o: $(TEST_DIR)/test_Commodity.cpp $(GMOCK_HEADERS) include/Commodity.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Commodity.cpp -o $@
