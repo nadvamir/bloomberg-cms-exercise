@@ -24,4 +24,16 @@ class Silver : public Commodity {
     virtual const char* getTag() const { return "SILV"; }
 };
 
+class Pork : public Commodity {
+    virtual const char* getTag() const { return "PORK"; }
+};
+
+class Oil : public Commodity {
+    virtual const char* getTag() const { return "OIL"; }
+};
+
+class Rice : public Commodity {
+    virtual const char* getTag() const { return "RICE"; }
+};
+
 #endif

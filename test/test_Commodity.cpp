@@ -34,3 +34,15 @@ TEST_F(ACommodity, PrintsItsNameToAStreamThroughAParentPointer) {
 
     ASSERT_THAT(ss.str(), StrEq("GOLD"));
 }
+
+TEST_F(ACommodity, AllSpecifiedCommoditiesAreDefined) {
+    stringstream ss;
+
+    ss  << Gold() << " "
+        << Silver() << " "
+        << Pork() << " "
+        << Oil() << " "
+        << Rice();
+
+    ASSERT_THAT(ss.str(), StrEq("GOLD SILV PORK OIL RICE"));
+}
