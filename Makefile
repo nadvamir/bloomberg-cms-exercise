@@ -87,7 +87,7 @@ test_SharedPtr.o: $(TEST_DIR)/test_SharedPtr.cpp $(GMOCK_HEADERS) \
 test_OrderStore.o: $(TEST_DIR)/test_OrderStore.cpp \
 		$(GMOCK_HEADERS) include/Order.h include/exceptions.h \
 		include/Commodity.h include/Dealer.h \
-		include/SharedPtr.h
+		include/SharedPtr.h include/OrderStore.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_OrderStore.cpp -o $@
 
 
