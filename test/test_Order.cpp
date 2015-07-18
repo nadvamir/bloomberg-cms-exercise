@@ -18,6 +18,10 @@ public:
         return Order(Buy);
     }
 
+    static Order sell() {
+        return Order(Sell);
+    }
+
     Side side() const { return side_; }
 };
 
@@ -25,5 +29,11 @@ TEST(AnOrder, CanBeBought) {
     Order order = Order::buy();
 
     ASSERT_TRUE(order.side() == Order::Buy);
+}
+
+TEST(AnOrder, CanBeSold) {
+    Order order = Order::sell();
+
+    ASSERT_TRUE(order.side() == Order::Sell);
 }
 
