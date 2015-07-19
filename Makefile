@@ -78,7 +78,11 @@ main: $(OBJECTS) main.o
 
 ####### TEST BUILD TARGETS ###################################
 TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
-			   test_OrderStore.o test_SharedPtr.o
+			   test_OrderStore.o test_SharedPtr.o \
+			   test_InsertIf.o
+
+test_InsertIf.o: $(TEST_DIR)/test_InsertIf.cpp $(GMOCK_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_InsertIf.cpp -o $@
 
 test_SharedPtr.o: $(TEST_DIR)/test_SharedPtr.cpp $(GMOCK_HEADERS) \
 		include/SharedPtr.h
