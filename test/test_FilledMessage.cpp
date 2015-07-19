@@ -13,5 +13,5 @@ TEST(AFilledMessage, AdheresToTheFormat) {
 
     ss << m;
 
-    ASSERT_THAT(ss.str(), testing::StrEq("10 HAS BEEN FILLED\n"));
+    ASSERT_THAT(ss.str(), testing::StrEq("10 HAS BEEN FILLED"));
 }

@@ -13,7 +13,7 @@ class RevokedMessage : public Message {
 protected:
     const std::string str() const {
         std::stringstream ss;
-        ss << id_ << " HAS BEEN REVOKED\n";
+        ss << id_ << " HAS BEEN REVOKED";
         return ss.str();
     }
 

@@ -13,5 +13,5 @@ TEST(ARevokeMessage, AdheresToTheFormat) {
 
     ss << m;
 
-    ASSERT_THAT(ss.str(), testing::StrEq("10 HAS BEEN REVOKED\n"));
+    ASSERT_THAT(ss.str(), testing::StrEq("10 HAS BEEN REVOKED"));
 }

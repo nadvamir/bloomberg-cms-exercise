@@ -13,7 +13,7 @@ class FilledMessage : public Message {
 protected:
     const std::string str() const {
         std::stringstream ss;
-        ss << id_ << " HAS BEEN FILLED\n";
+        ss << id_ << " HAS BEEN FILLED";
         return ss.str();
     }
 

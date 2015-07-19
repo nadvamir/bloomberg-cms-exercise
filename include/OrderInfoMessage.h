@@ -19,7 +19,7 @@ protected:
 public:
     OrderInfoMessage(OrderPtr o) {
         std::stringstream ss;
-        ss << *o << "\n";
+        ss << *o;
         order_ = ss.str();
     }
 };

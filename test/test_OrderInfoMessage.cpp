@@ -15,7 +15,7 @@ TEST(AnOrderInfoMessage, AdheresToTheFormat) {
     OrderInfoMessage fm(order);
     Message& m = fm;
     stringstream ss;
-    string expected = "1 JPM SELL SILV 10 15.5\n";
+    string expected = "1 JPM SELL SILV 10 15.5";
 
     ss << m;
 
@@ -30,7 +30,7 @@ TEST(AnOrderInfoMessage, IsNotKeepingReferencesToLiveOrders) {
     OrderInfoMessage fm(order);
     Message& m = fm;
     stringstream ss;
-    string expected = "1 JPM SELL SILV 10 15.5\n";
+    string expected = "1 JPM SELL SILV 10 15.5";
 
     order->id(1000);
     ss << m;

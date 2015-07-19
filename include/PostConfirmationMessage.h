@@ -15,7 +15,7 @@ class PostConfirmationMessage : public Message {
 protected:
     const std::string str() const {
         std::stringstream ss;
-        ss << orderInfo_ << " HAS BEEN POSTED\n";
+        ss << orderInfo_ << " HAS BEEN POSTED";
         return ss.str();
     }
 

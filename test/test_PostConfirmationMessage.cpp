@@ -15,8 +15,8 @@ TEST(APostConfirmationMessage, AdheresToTheFormat) {
     PostConfirmationMessage fm(order);
     Message& m = fm;
     stringstream ss;
-    string expected = "1 JPM SELL SILV 10 15.5\n"
-                      " HAS BEEN POSTED\n";
+    string expected = "1 JPM SELL SILV 10 15.5"
+                      " HAS BEEN POSTED";
 
     ss << m;
 
