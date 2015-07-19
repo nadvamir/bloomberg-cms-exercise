@@ -42,3 +42,11 @@ TEST_F(AnOrderStore, StoresUniqueIdsToEveryOrder) {
     ASSERT_THAT(id, Ne(id2));
 }
 
+TEST_F(AnOrderStore, ThrowsAnExceptionIfOrderIsNotFound) {
+    OrderStore store;
+
+    long id = store.put(order);
+
+    ASSERT_THROW(store.get(id + 1), UnknownOrder);
+}
+

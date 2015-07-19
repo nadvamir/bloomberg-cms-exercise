@@ -22,7 +22,11 @@ public:
     }
 
     OrderPtr& get(long id) {
-        return store.find(id)->second;
+        OrderMap::iterator it = store.find(id);
+        if (it == store.end()) {
+            throw UnknownOrder();
+        }
+        return it->second;
     }
 };
 
