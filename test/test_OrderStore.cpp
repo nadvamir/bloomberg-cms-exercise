@@ -44,9 +44,15 @@ TEST_F(AnOrderStore, StoresUniqueIdsToEveryOrder) {
 
 TEST_F(AnOrderStore, ThrowsAnExceptionIfOrderIsNotFound) {
     OrderStore store;
-
     long id = store.put(order);
 
     ASSERT_THROW(store.get(id + 1), UnknownOrder);
 }
 
+TEST_F(AnOrderStore, CanRemoveAnOrderById) {
+    OrderStore store;
+    long id = store.put(order);
+
+    ASSERT_NO_THROW(store.remove(id));
+    ASSERT_THROW(store.get(id), UnknownOrder);
+}

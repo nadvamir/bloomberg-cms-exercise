@@ -28,6 +28,10 @@ public:
         }
         return it->second;
     }
+
+    void remove(long id) {
+        store.erase(id);
+    }
 };
 
 #endif
