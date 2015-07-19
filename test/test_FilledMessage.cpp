@@ -2,12 +2,11 @@
 
 #include <sstream>
 
-#include "include/Message.h"
 #include "include/FilledMessage.h"
 
 using namespace std;
 
-TEST(AMessage, CanBeStreamedThroughAParentObject) {
+TEST(AFilledMessage, AdheresToTheFormat) {
     FilledMessage fm(10);
     Message& m = fm;
     stringstream ss;

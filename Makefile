@@ -79,7 +79,12 @@ main: $(OBJECTS) main.o
 ####### TEST BUILD TARGETS ###################################
 TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
 			   test_OrderStore.o test_SharedPtr.o \
-			   test_CopyIf.o test_Message.o
+			   test_CopyIf.o test_Message.o \
+			   test_FilledMessage.o
+
+test_FilledMessage.o: $(TEST_DIR)/test_FilledMessage.cpp \
+		$(GMOCK_HEADERS) include/FilledMessage.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_FilledMessage.cpp -o $@
 
 test_Message.o: $(TEST_DIR)/test_Message.cpp $(GMOCK_HEADERS) \
 		include/Message.h
