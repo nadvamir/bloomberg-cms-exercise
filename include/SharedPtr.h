@@ -42,6 +42,7 @@ public:
     }
 
     ReferenceType operator*() { return *ptr_; }
+    const ReferenceType operator*() const { return *ptr_; }
 
     StoredType operator->() { return ptr_; }
 };
