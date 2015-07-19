@@ -12,6 +12,7 @@
 
 class OrderStore {
     typedef std::map<long, OrderPtr> OrderMap;
+    typedef std::pair<long, OrderPtr> OrderPair;
     OrderMap store;
     long lastId;
 
@@ -39,7 +40,7 @@ public:
 
     template<class UnaryPred>
     std::vector<OrderPtr> filter(UnaryPred pred) {
-        std::vector<std::pair<long, OrderPtr> > filtered;
+        std::vector<OrderPair> filtered;
         copy_if(
             store.begin(),
             store.end(),
@@ -57,7 +58,7 @@ public:
     }
 
 private:
-    static OrderPtr& pair2Order(std::pair<long, OrderPtr>& el) {
+    static OrderPtr& pair2Order(OrderPair& el) {
         return el.second;
     }
 
