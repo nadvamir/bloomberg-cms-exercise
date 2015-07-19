@@ -40,6 +40,7 @@ public:
     const CommodityPtr& commodity() const { return commodity_; }
     Side side() const { return side_; }
     int quantity() const { return quantity_; }
+    double price() const { return price_; }
     bool isFilled() const { return quantity_ == 0; }
 
     void id(int i) { id_ = i; }
