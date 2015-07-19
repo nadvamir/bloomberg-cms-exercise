@@ -80,7 +80,16 @@ main: $(OBJECTS) main.o
 TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
 			   test_OrderStore.o test_SharedPtr.o \
 			   test_CopyIf.o test_Message.o \
-			   test_FilledMessage.o
+			   test_FilledMessage.o test_RevokedMessage.o \
+			   test_OrderInfoMessage.o
+
+test_OrderInfoMessage.o: $(TEST_DIR)/test_OrderInfoMessage.cpp \
+		$(GMOCK_HEADERS) include/OrderInfoMessage.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_OrderInfoMessage.cpp -o $@
+
+test_RevokedMessage.o: $(TEST_DIR)/test_RevokedMessage.cpp \
+		$(GMOCK_HEADERS) include/RevokedMessage.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_RevokedMessage.cpp -o $@
 
 test_FilledMessage.o: $(TEST_DIR)/test_FilledMessage.cpp \
 		$(GMOCK_HEADERS) include/FilledMessage.h
