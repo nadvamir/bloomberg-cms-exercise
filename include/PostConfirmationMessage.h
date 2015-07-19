@@ -2,7 +2,6 @@
 #define POST_CONFIRMATION_MESSAGE_H
 
 #include <iostream>
-#include <sstream>
 #include <string>
 
 #include "include/Message.h" 
@@ -13,10 +12,8 @@ class PostConfirmationMessage : public Message {
     OrderInfoMessage orderInfo_;
 
 protected:
-    const std::string str() const {
-        std::stringstream ss;
-        ss << orderInfo_ << " HAS BEEN POSTED";
-        return ss.str();
+    std::ostream& stream(std::ostream& o) const {
+        return o << orderInfo_ << " HAS BEEN POSTED";
     }
 
 public:

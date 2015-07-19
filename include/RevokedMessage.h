@@ -2,7 +2,6 @@
 #define REVOKED_MESSAGE_H
 
 #include <iostream>
-#include <sstream>
 #include <string>
 
 #include "include/Message.h" 
@@ -11,10 +10,8 @@ class RevokedMessage : public Message {
     long id_;
 
 protected:
-    const std::string str() const {
-        std::stringstream ss;
-        ss << id_ << " HAS BEEN REVOKED";
-        return ss.str();
+    std::ostream& stream(std::ostream& o) const {
+        return o << id_ << " HAS BEEN REVOKED";
     }
 
 public:

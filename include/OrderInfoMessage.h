@@ -12,8 +12,8 @@ class OrderInfoMessage : public Message {
     std::string order_;
 
 protected:
-    const std::string str() const {
-        return order_;
+    std::ostream& stream(std::ostream& o) const {
+        return o << order_;
     }
 
 public:

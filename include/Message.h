@@ -12,15 +12,13 @@ typedef SharedPtr<Message> MessagePtr;
 
 class Message {
 protected:
-    virtual const std::string str() const {
-        return "BASE\n";
-    }
+    virtual std::ostream& stream(std::ostream& o) const = 0;
 
 public:
     virtual ~Message() {}
     friend std::ostream& operator<<(std::ostream& o,
                                     const Message& m) {
-        return o << m.str();
+        return m.stream(o);
     }
 };
 
