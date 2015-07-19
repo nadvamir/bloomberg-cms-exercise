@@ -17,7 +17,7 @@ class OrderInfoListMessage : public Message {
 
 protected:
     std::ostream& stream(std::ostream& o) const {
-        // can't use copy trick because of trailing newlines :/
+        // can't use the copy trick because of trailing newlines :/
         OInfoCont::const_iterator it = orders_.begin();
         for (; it != orders_.end(); ++it) {
             o << *it << "\n";
@@ -26,7 +26,7 @@ protected:
     }
 
 public:
-    OrderInfoListMessage(std::vector<OrderPtr> orders) {
+    OrderInfoListMessage(const std::vector<OrderPtr>& orders) {
         copy(orders.begin(), orders.end(), back_inserter(orders_));
     }
 };
