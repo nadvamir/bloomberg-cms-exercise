@@ -3,26 +3,13 @@
 #include <iterator>
 #include <vector>
 
+#include "include/CopyIf.h"
+
 using namespace testing;
 using namespace std;
 
 namespace {
 bool isEven(int num) { return num % 2 == 0; }
-}
-
-template<
-    class InputIterator,
-    class OutputIterator,
-    class Predicate>
-void copy_if(InputIterator first,
-             InputIterator last,
-             OutputIterator out,
-             Predicate pred) {
-    for (; first != last; ++first) {
-        if (pred(*first)) {
-            *out++ = *first;
-        }
-    }
 }
 
 TEST(ACopyIf, CopiesElementsIfTheyMatchAPredicate) {

@@ -81,7 +81,8 @@ TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
 			   test_OrderStore.o test_SharedPtr.o \
 			   test_CopyIf.o
 
-test_CopyIf.o: $(TEST_DIR)/test_CopyIf.cpp $(GMOCK_HEADERS)
+test_CopyIf.o: $(TEST_DIR)/test_CopyIf.cpp $(GMOCK_HEADERS) \
+		include/CopyIf.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_CopyIf.cpp -o $@
 
 test_SharedPtr.o: $(TEST_DIR)/test_SharedPtr.cpp $(GMOCK_HEADERS) \
