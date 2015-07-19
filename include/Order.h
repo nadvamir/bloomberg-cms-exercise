@@ -1,6 +1,8 @@
 #ifndef ORDER_H
 #define ORDER_H
 
+#include <iostream>
+
 #include "include/Dealer.h"
 #include "include/Commodity.h"
 #include "include/exceptions.h"
@@ -47,6 +49,17 @@ public:
             throw InvalidMessage();
         }
         quantity_ -= q;
+    }
+
+    friend std::ostream& operator<<(std::ostream& o,
+                                    const Order& ord) {
+        o   << ord.id_ << " "
+            << ord.dealer_ << " "
+            << ((ord.side_ == Buy) ? "BUY" : "SELL") << " "
+            << *ord.commodity_ << " "
+            << ord.quantity_ << " "
+            << ord.price_;
+        return o;
     }
 };
 

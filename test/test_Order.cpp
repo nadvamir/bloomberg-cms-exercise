@@ -1,5 +1,8 @@
 #include "gmock/gmock.h"
 
+#include <string>
+#include <sstream>
+
 #include "include/Commodity.h"
 #include "include/Dealer.h"
 #include "include/Order.h"
@@ -95,4 +98,13 @@ TEST_F(AnOrder, IsFilledWhenAggressedInFull) {
     orderPtr->aggress(quantity);
 
     ASSERT_THAT(orderPtr->isFilled(), Eq(true));
+}
+
+TEST_F(AnOrder, CanBeStreamed) {
+    stringstream ss;
+    string expected = "-1 JPM BUY GOLD 500 1";
+
+    ss << *orderPtr;
+
+    ASSERT_THAT(ss.str(), StrEq(expected));
 }
