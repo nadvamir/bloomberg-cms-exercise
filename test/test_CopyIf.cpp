@@ -3,8 +3,6 @@
 #include <iterator>
 #include <vector>
 
-#include "include/InsertIf.h"
-
 using namespace testing;
 using namespace std;
 
