@@ -2,15 +2,19 @@
 #define ORDER_STORE_H
 
 #include <map>
+#include <iterator>
+#include <algorithm>
+#include <vector>
 
 #include "include/Order.h"
 #include "include/exceptions.h"
+#include "include/CopyIf.h"
 
 class OrderStore {
     typedef std::map<long, OrderPtr> OrderMap;
     OrderMap store;
     long lastId;
-    
+
 public:
     OrderStore() : lastId(0) {}
 
@@ -32,6 +36,39 @@ public:
     void remove(long id) {
         store.erase(id);
     }
+
+    template<class UnaryPred>
+    std::vector<OrderPtr> filter(UnaryPred pred) {
+        std::vector<std::pair<long, OrderPtr> > filtered;
+        copy_if(
+            store.begin(),
+            store.end(),
+            back_inserter(filtered),
+            PredAdaptor<UnaryPred>(pred));
+
+        std::vector<OrderPtr> orders;
+        transform(
+            filtered.begin(),
+            filtered.end(),
+            back_inserter(orders),
+            OrderStore::pair2Order);
+
+        return orders;
+    }
+
+private:
+    static OrderPtr& pair2Order(std::pair<long, OrderPtr>& el) {
+        return el.second;
+    }
+
+    template<class UnaryPred>
+    struct PredAdaptor {
+        UnaryPred pred;
+        PredAdaptor(UnaryPred p) : pred(p) {}
+        bool operator()(OrderMap::value_type& el) {
+            return pred(el.second);
+        }
+    };
 };
 
 #endif
