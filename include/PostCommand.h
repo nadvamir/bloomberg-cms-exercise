@@ -23,7 +23,7 @@ public:
 
         store->put(order);
 
-        return MessagePtr();
+        return MessagePtr(new PostConfirmationMessage(order));
     }
 
 private:

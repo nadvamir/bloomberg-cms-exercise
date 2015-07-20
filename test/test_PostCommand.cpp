@@ -51,3 +51,18 @@ TEST_F(APostCommand, SubmitsAnOrder) {
     ASSERT_THAT(submittedOrder->price(), Eq(price));
 }
 
+TEST_F(APostCommand, ReturnsPostConfirmationMessage) {
+    OrderPtr submittedOrder;
+    PostCommand cmd(Dealer("JPM"), Order::Buy, commodity,
+                    amount, price);
+    EXPECT_CALL(*store, put(_))
+        .WillOnce(SaveArg<0>(&submittedOrder));
+
+    stringstream ss, pconf;
+    ss << *cmd(store);
+    pconf << PostConfirmationMessage(submittedOrder);
+
+    ASSERT_THAT(ss.str(), StrEq(pconf.str()));
+
+}
+
