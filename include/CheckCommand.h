@@ -26,6 +26,10 @@ public:
 
         return MessagePtr(new OrderInfoMessage(order));
     }
+
+    bool operator==(const CheckCommand& cmd) const {
+        return dealer_ == cmd.dealer_ && orderId_ == cmd.orderId_;
+    }
 };
 
 #endif

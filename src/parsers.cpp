@@ -51,11 +51,12 @@ namespace {
 
 CommandPtr parseRevokeCommand(istream& in, const Dealer& d) {
     long id; in >> id;
-    return CommandPtr(new RevokeCommand(Dealer("JPM"), id));
+    return CommandPtr(new RevokeCommand(d, id));
 }
 
 CommandPtr parseCheckCommand(istream& in, const Dealer& d) {
-    return CommandPtr(new CheckCommand(Dealer("JPM"), 1l));
+    long id; in >> id;
+    return CommandPtr(new CheckCommand(d, id));
 }
 
 }

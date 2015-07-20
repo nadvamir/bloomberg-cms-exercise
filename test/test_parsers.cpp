@@ -47,3 +47,12 @@ TEST(ParseMessage, ParsesRevokeCommandCorrectly) {
     ASSERT_THAT(*pCmd, Eq(expected));
 }
 
+TEST(ParseMessage, ParsesCheckCommandCorrectly) {
+    CheckCommand expected(Dealer("BARX"), 2);
+    stringstream ss("BARX CHECK 2");
+    CommandPtr cmd = parseMessage(ss);
+
+    CheckCommand *pCmd = dynamic_cast<CheckCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+
