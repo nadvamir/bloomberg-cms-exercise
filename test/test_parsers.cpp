@@ -7,6 +7,7 @@
 #include "include/CheckCommand.h"
 #include "include/AggressCommand.h"
 #include "include/PostCommand.h"
+#include "include/ListCommand.h"
 #include "include/parsers.h"
 #include "include/exceptions.h"
 
@@ -73,6 +74,15 @@ TEST(ParseMessage, ParsesPostCommandCorrectly) {
     CommandPtr cmd = parseMessage(ss);
 
     PostCommand *pCmd = dynamic_cast<PostCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+
+TEST(ParseMessage, ParsesDefaultListCommandCorrectly) {
+    ListCommand expected;
+    stringstream ss("DB LIST");
+    CommandPtr cmd = parseMessage(ss);
+
+    ListCommand *pCmd = dynamic_cast<ListCommand*>(REPR(cmd));
     ASSERT_THAT(*pCmd, Eq(expected));
 }
 

@@ -56,6 +56,13 @@ public:
         return MessagePtr(new OrderInfoListMessage(
             store->filter(showAll)));
     }
+
+    bool operator==(const ListCommand& cmd) const {
+        return ((commodity_.isNull() && cmd.commodity_.isNull())
+            || (!commodity_.isNull() && !cmd.commodity_.isNull()
+                && *commodity_ == *(cmd.commodity_)))
+            && dealer_ == cmd.dealer_;
+    }
 };
 
 #endif
