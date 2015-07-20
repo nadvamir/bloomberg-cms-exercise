@@ -78,8 +78,17 @@ TEST(ParseMessage, ParsesPostCommandCorrectly) {
 }
 
 TEST(ParseMessage, ParsesDefaultListCommandCorrectly) {
-    ListCommand expected;
+    ListCommand expected = ListCommand(CommodityPtr(), Dealer());
     stringstream ss("DB LIST");
+    CommandPtr cmd = parseMessage(ss);
+
+    ListCommand *pCmd = dynamic_cast<ListCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+
+TEST(ParseMessage, ParsesCommodityListCommandCorrectly) {
+    ListCommand expected = ListCommand(CommodityPtr(new Oil), Dealer());
+    stringstream ss("DB LIST OIL");
     CommandPtr cmd = parseMessage(ss);
 
     ListCommand *pCmd = dynamic_cast<ListCommand*>(REPR(cmd));

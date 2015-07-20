@@ -89,7 +89,18 @@ CommandPtr parsePostCommand(istream& in, const Dealer& dealer) {
 }
 
 CommandPtr parseListCommand(istream& in, const Dealer&) {
-    return CommandPtr(new ListCommand(CommodityPtr(), Dealer()));
+    CommodityPtr commodity;
+    string scommodity;
+    if (in >> scommodity) {
+        commodity = getCommodity(scommodity);
+    }
+
+    Dealer dealer;
+    string dealerId;
+    if (in >> dealerId) {
+        dealer = Dealer(dealerId);
+    }
+    return CommandPtr(new ListCommand(commodity, dealer));
 }
 
 }
