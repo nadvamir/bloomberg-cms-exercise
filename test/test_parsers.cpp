@@ -37,3 +37,13 @@ TEST(ParseMessage, ThrowsUnknownDealerIfDealerNotFound) {
 
     ASSERT_THROW(parseMessage(ss), UnknownDealer);
 }
+
+TEST(ParseMessage, ParsesRevokeCommandCorrectly) {
+    RevokeCommand expected(Dealer("JPM"), 2);
+    stringstream ss("JPM REVOKE 2");
+    CommandPtr cmd = parseMessage(ss);
+
+    RevokeCommand *pCmd = dynamic_cast<RevokeCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+

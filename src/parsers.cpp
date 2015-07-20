@@ -13,7 +13,8 @@ namespace {
 CommandPtr parseRevokeCommand(istream&, const Dealer&);
 CommandPtr parseCheckCommand(istream&, const Dealer&);
 
-typedef pair<string, CommandPtr (*)(istream&, const Dealer&)> CallbackPair;
+typedef pair<string, CommandPtr (*)(istream&, const Dealer&)>
+        CallbackPair;
 CallbackPair cmdParsers[] = {
     CallbackPair("REVOKE", parseRevokeCommand),
     CallbackPair("CHECK", parseCheckCommand)
@@ -49,7 +50,8 @@ CommandPtr parseMessage(istream& in) {
 namespace {
 
 CommandPtr parseRevokeCommand(istream& in, const Dealer& d) {
-    return CommandPtr(new RevokeCommand(Dealer("JPM"), 1l));
+    long id; in >> id;
+    return CommandPtr(new RevokeCommand(Dealer("JPM"), id));
 }
 
 CommandPtr parseCheckCommand(istream& in, const Dealer& d) {

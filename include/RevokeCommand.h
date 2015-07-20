@@ -23,6 +23,10 @@ public:
 
         return MessagePtr(new RevokedMessage(orderId_));
     }
+
+    bool operator==(const RevokeCommand& cmd) const {
+        return dealer_ == cmd.dealer_ && orderId_ == cmd.orderId_;
+    }
 };
 
 #endif
