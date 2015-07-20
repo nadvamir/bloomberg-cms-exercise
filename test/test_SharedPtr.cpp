@@ -5,6 +5,7 @@
 using namespace testing;
 using namespace std;
 
+namespace {
 struct TestStruct {
     int a;
     static int constructionCount;
@@ -24,6 +25,15 @@ struct TestStruct {
     }
     ~TestStruct() { ++TestStruct::destructionCount; }
 };
+
+struct Base {
+    virtual ~Base() {}
+    virtual int f() { return 1; }
+};
+struct Derived : Base {
+    virtual int f() { return 2; }
+};
+}
 
 int TestStruct::constructionCount = 0;
 int TestStruct::destructionCount = 0;
@@ -101,4 +111,10 @@ TEST_F(ASharedPtr, SupportsANULLCheck) {
 
     pointer = SharedPtr<TestStruct>(p);
     ASSERT_THAT(pointer.isNull(), Eq(false));
+}
+
+TEST_F(ASharedPtr, SupportsPolymorphism) {
+    SharedPtr<Base> base(new Derived());
+
+    ASSERT_THAT(base->f(), Eq(Derived().f()));
 }
