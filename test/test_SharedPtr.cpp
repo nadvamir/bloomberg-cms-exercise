@@ -92,3 +92,13 @@ TEST_F(ASharedPtr, CanBeAssignedEvenIfItWasNull) {
         ptr = SharedPtr<TestStruct>(new TestStruct(42));
     });
 }
+
+TEST_F(ASharedPtr, SupportsANULLCheck) {
+    SharedPtr<TestStruct> pointer;
+    TestStruct* p = new TestStruct(42);
+
+    ASSERT_THAT(pointer.isNull(), Eq(true));
+
+    pointer = SharedPtr<TestStruct>(p);
+    ASSERT_THAT(pointer.isNull(), Eq(false));
+}
