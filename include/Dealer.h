@@ -23,6 +23,9 @@ public:
     bool operator==(const Dealer& d) const {
         return id_ == d.id_;
     }
+    bool operator!=(const Dealer& d) const {
+        return id_ != d.id_;
+    }
 
     friend std::ostream& operator<<(std::ostream& o,
                                     const Dealer &d) {

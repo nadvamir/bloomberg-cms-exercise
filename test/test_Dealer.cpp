@@ -25,6 +25,11 @@ TEST_F(ADealer, DealersFromDifferentCompaniesAreNotEqual) {
     ASSERT_THAT(test_compare(jp, barx), Eq(false));
 }
 
+TEST_F(ADealer, SupportsNotEqOperator) {
+    Dealer jp("JPM"), barx("BARX");
+    ASSERT_THAT(jp != barx, Eq(true));
+}
+
 TEST_F(ADealer, CanOnlyBeCreatedForSpecifiedCompanies) {
     ASSERT_NO_THROW({ Dealer("JPM"); });
     ASSERT_THROW(Dealer("MAXBANK"), UnknownDealer);
