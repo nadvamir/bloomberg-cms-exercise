@@ -95,3 +95,13 @@ TEST(ParseMessage, ParsesCommodityListCommandCorrectly) {
     ASSERT_THAT(*pCmd, Eq(expected));
 }
 
+TEST(ParseMessage, ParsesFullListCommandCorrectly) {
+    ListCommand expected
+        = ListCommand(CommodityPtr(new Oil), Dealer("RBS"));
+    stringstream ss("DB LIST OIL RBS");
+    CommandPtr cmd = parseMessage(ss);
+
+    ListCommand *pCmd = dynamic_cast<ListCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+
