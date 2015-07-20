@@ -33,8 +33,13 @@ CommandPtr parseMessage(istream& in) {
     string dealerId, cmd;
     in >> dealerId >> cmd;
     CallbackPred pred(cmd);
+
     CallbackPair* cbk
         = find_if(cmdParsers, cmdParsers + CMD_N, pred);
+    if (cbk == cmdParsers + CMD_N) {
+        throw InvalidMessage();
+    }
+
     return cbk->second(in);
 }
 
