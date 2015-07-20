@@ -93,7 +93,13 @@ TEST_OBJECTS = test_Order.o \
 			   test_RevokeCommand.o \
 			   test_CheckCommand.o \
 			   test_AggressCommand.o \
-			   test_PostCommand.o
+			   test_PostCommand.o \
+			   test_ListCommand.o
+
+test_ListCommand.o: $(TEST_DIR)/test_ListCommand.cpp \
+		$(GMOCK_HEADERS) include/ListCommand.h \
+		$(TEST_DIR)/MockOrderStore.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_ListCommand.cpp -o $@
 
 test_PostCommand.o: $(TEST_DIR)/test_PostCommand.cpp \
 		$(GMOCK_HEADERS) include/PostCommand.h \
