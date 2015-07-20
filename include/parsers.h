@@ -4,6 +4,6 @@
 #include <iostream>
 #include "include/Command.h"
 
-CommandPtr parseMessage(std::ostream& o);
+CommandPtr parseMessage(std::istream& in);
 
 #endif

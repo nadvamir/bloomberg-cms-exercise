@@ -5,6 +5,7 @@
 
 #include "include/Command.h"
 #include "include/RevokeCommand.h"
+#include "include/CheckCommand.h"
 #include "include/parsers.h"
 
 using namespace testing;
@@ -15,4 +16,11 @@ TEST(ParseMessage, UnderstandsRevokeCommand) {
     CommandPtr cmd = parseMessage(ss);
 
     ASSERT_TRUE(dynamic_cast<RevokeCommand*>(REPR(cmd)));
+}
+
+TEST(ParseMessage, UnderstandsCheckCommand) {
+    stringstream ss("JPM CHECK 1");
+    CommandPtr cmd = parseMessage(ss);
+
+    ASSERT_TRUE(dynamic_cast<CheckCommand*>(REPR(cmd)));
 }
