@@ -3,9 +3,9 @@
 #include <string>
 #include <sstream>
 
-#include "include/Command.h"
 #include "include/RevokeCommand.h"
 #include "include/CheckCommand.h"
+#include "include/AggressCommand.h"
 #include "include/parsers.h"
 #include "include/exceptions.h"
 
@@ -53,6 +53,15 @@ TEST(ParseMessage, ParsesCheckCommandCorrectly) {
     CommandPtr cmd = parseMessage(ss);
 
     CheckCommand *pCmd = dynamic_cast<CheckCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+
+TEST(ParseMessage, ParsesAggressCommandCorrectly) {
+    AggressCommand expected(1, 10);
+    stringstream ss("BARX AGGRESS 1 10");
+    CommandPtr cmd = parseMessage(ss);
+
+    AggressCommand *pCmd = dynamic_cast<AggressCommand*>(REPR(cmd));
     ASSERT_THAT(*pCmd, Eq(expected));
 }
 

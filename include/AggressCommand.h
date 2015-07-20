@@ -27,6 +27,10 @@ public:
         return MessagePtr(new TradeReportMessage(aggression));
     }
 
+    bool operator==(const AggressCommand& cmd) const {
+        return orderId_ == cmd.orderId_ && amount_ == cmd.amount_;
+    }
+
 private:
     Order::Side opposite(Order::Side side) {
         return (side == Order::Buy) ? Order::Sell : Order::Buy;
