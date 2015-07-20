@@ -3,6 +3,10 @@
 
 #include <include/Message.h>
 #include <include/OrderStore.h>
+#include <include/SharedPtr.h>
+
+class Command;
+typedef SharedPtr<Command> CommandPtr;
 
 class Command {
 public:
