@@ -57,11 +57,11 @@ TEST_F(AnAggressCommand, ReturnsTradeReportMessage) {
     ASSERT_THAT(ss.str(), StrEq(tradeR.str()));
 }
 
-//TEST_F(AnAggressCommand, ThrowsWhenRunOnNotOwnOrder) {
-//    AggressCommand cmd(ownId, orderId);
-//    EXPECT_CALL(*store, get(orderId))
-//        .WillOnce(ReturnRef(barxOrder));
-//
-//    ASSERT_THROW(cmd(store), Unauthorized);
-//}
-//
+TEST_F(AnAggressCommand, ThrowsWhenAggressingTooMuch) {
+    AggressCommand cmd(orderId, initAmount + 1);
+    EXPECT_CALL(*store, get(orderId))
+        .WillOnce(ReturnRef(jpmOrder));
+
+    ASSERT_THROW(cmd(store), InvalidMessage);
+}
+
