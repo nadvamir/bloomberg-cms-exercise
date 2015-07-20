@@ -2,6 +2,7 @@
 #define COMMODITY_H
 
 #include <iostream>
+#include <typeinfo>
 
 // An enum + global operator<< function would do for this
 // exercise; however, in pursuing this design I got to play
