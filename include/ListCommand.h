@@ -9,6 +9,10 @@
 #include "include/Commodity.h"
 #include "include/exceptions.h"
 
+namespace {
+bool showAll(OrderPtr) { return true; }
+}
+
 struct CommodityPred : public std::unary_function<OrderPtr, bool> {
     CommodityPtr commodity;
     CommodityPred(CommodityPtr c) : commodity(c) {}
@@ -31,20 +35,19 @@ struct CommodityAndDealerPred
 };
 
 class ListCommand : public Command {
+    CommodityPtr commodity_;
     Dealer dealer_;
-    long orderId_;
 public:
-    ListCommand(const Dealer& dealer, long orderId)
-    : dealer_(dealer), orderId_(orderId) {}
+    ListCommand() {}
+    ListCommand(CommodityPtr c) : commodity_(c) {}
+    ListCommand(CommodityPtr c, const Dealer& d)
+    : commodity_(c), dealer_(d) {}
 
     MessagePtr operator()(OrderStorePtr store) {
-        OrderPtr order = store->get(orderId_);
-        if (order->dealer() != dealer_) {
-            throw Unauthorized();
+        if (commodity_.isNull() && dealer_ == Dealer()) {
+            return MessagePtr(new OrderInfoListMessage(
+                store->filter(showAll)));
         }
-
-        store->remove(orderId_);
-
         return MessagePtr();
     }
 };

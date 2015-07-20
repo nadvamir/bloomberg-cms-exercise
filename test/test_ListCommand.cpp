@@ -16,6 +16,7 @@ public:
     long orderId;
     OrderStorePtr store;
     OrderPtr jpmOrder, barxOrder, silvOrder;
+    string jpmStr, barxStr, silvStr;
 
     void SetUp() {
         ownId = "JPM";
@@ -42,6 +43,11 @@ public:
         store->put(jpmOrder);
         store->put(silvOrder);
         store->put(barxOrder);
+
+        stringstream ss;
+        ss << *jpmOrder; jpmStr = ss.str(); ss.str(string());
+        ss << *silvOrder; silvStr = ss.str(); ss.str(string());
+        ss << *barxOrder; barxStr = ss.str();
     }
 };
 
@@ -58,4 +64,16 @@ TEST_F(Slow_AListCommand, CommodityAndDealerPredicateWorks) {
     ASSERT_THAT(pred(jpmOrder), Eq(true));
     ASSERT_THAT(pred(silvOrder), Eq(false));
     ASSERT_THAT(pred(barxOrder), Eq(false));
+}
+
+TEST_F(Slow_AListCommand, ReturnsAllOrdersByDefault) {
+    ListCommand cmd;
+
+    stringstream ss, expected;
+    expected << jpmStr << "\n" << silvStr << "\n"
+             << barxStr << "\nEND OF LIST";
+
+    ss << *cmd(store);
+
+    ASSERT_THAT(ss.str(), StrEq(expected.str()));
 }
