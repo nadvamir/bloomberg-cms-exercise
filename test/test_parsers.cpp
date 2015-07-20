@@ -31,3 +31,9 @@ TEST(ParseMessage, ThrowsInvalidMessageIfCmdNotFound) {
 
     ASSERT_THROW(parseMessage(ss), InvalidMessage);
 }
+
+TEST(ParseMessage, ThrowsUnknownDealerIfDealerNotFound) {
+    stringstream ss("MAXBANK CHECK 1");
+
+    ASSERT_THROW(parseMessage(ss), UnknownDealer);
+}

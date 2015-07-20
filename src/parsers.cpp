@@ -2,6 +2,7 @@
 #include <algorithm>
 
 #include "include/parsers.h"
+#include "include/Dealer.h"
 #include "include/RevokeCommand.h"
 #include "include/CheckCommand.h"
 
@@ -9,10 +10,10 @@ using namespace std;
 
 namespace {
 
-CommandPtr parseRevokeCommand(istream&);
-CommandPtr parseCheckCommand(istream&);
+CommandPtr parseRevokeCommand(istream&, const Dealer&);
+CommandPtr parseCheckCommand(istream&, const Dealer&);
 
-typedef pair<string, CommandPtr (*)(istream&)> CallbackPair;
+typedef pair<string, CommandPtr (*)(istream&, const Dealer&)> CallbackPair;
 CallbackPair cmdParsers[] = {
     CallbackPair("REVOKE", parseRevokeCommand),
     CallbackPair("CHECK", parseCheckCommand)
@@ -32,6 +33,8 @@ struct CallbackPred : public unary_function<CallbackPair, bool> {
 CommandPtr parseMessage(istream& in) {
     string dealerId, cmd;
     in >> dealerId >> cmd;
+
+    Dealer dealer(dealerId);
     CallbackPred pred(cmd);
 
     CallbackPair* cbk
@@ -40,16 +43,16 @@ CommandPtr parseMessage(istream& in) {
         throw InvalidMessage();
     }
 
-    return cbk->second(in);
+    return cbk->second(in, dealer);
 }
 
 namespace {
 
-CommandPtr parseRevokeCommand(istream& in) {
+CommandPtr parseRevokeCommand(istream& in, const Dealer& d) {
     return CommandPtr(new RevokeCommand(Dealer("JPM"), 1l));
 }
 
-CommandPtr parseCheckCommand(istream& in) {
+CommandPtr parseCheckCommand(istream& in, const Dealer& d) {
     return CommandPtr(new CheckCommand(Dealer("JPM"), 1l));
 }
 
