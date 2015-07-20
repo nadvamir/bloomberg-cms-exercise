@@ -46,6 +46,7 @@ public:
     const ReferenceType operator*() const { return *ptr_; }
 
     StoredType operator->() { return ptr_; }
+    StoredType operator->() const { return ptr_; }
 
     bool isNull() { return ptr_ == NULL; }
 };
