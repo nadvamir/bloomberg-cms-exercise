@@ -1,5 +1,8 @@
 #include "gmock/gmock.h"
 
+#include <string>
+#include <sstream>
+
 #include "include/exceptions.h"
 #include "include/RevokeCommand.h"
 #include "test/MockOrderStore.h"
@@ -37,4 +40,26 @@ TEST_F(ARevokeCommand, ThrowsWhenRunOnNotOwnOrder) {
         .WillOnce(ReturnRef(barxOrder));
 
     ASSERT_THROW(cmd(store), Unauthorized);
+}
+
+TEST_F(ARevokeCommand, DelegatesRemovalToTheStore) {
+    RevokeCommand cmd(ownId, orderId);
+    EXPECT_CALL(*store, get(orderId))
+        .WillOnce(ReturnRef(jpmOrder));
+    EXPECT_CALL(*store, remove(orderId));
+
+    ASSERT_NO_THROW(cmd(store));
+}
+
+TEST_F(ARevokeCommand, ReturnsRevokedMessage) {
+    RevokeCommand cmd(ownId, orderId);
+    EXPECT_CALL(*store, get(orderId))
+        .WillOnce(ReturnRef(jpmOrder));
+    EXPECT_CALL(*store, remove(orderId));
+
+    stringstream ss, revoked;
+    ss << *cmd(store);
+    revoked << RevokedMessage(orderId);
+
+    ASSERT_THAT(ss.str(), StrEq(revoked.str()));
 }
