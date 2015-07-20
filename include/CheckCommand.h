@@ -1,16 +1,17 @@
-#ifndef REVOKE_COMMAND_H
-#define REVOKE_COMMAND_H
+#ifndef CHECK_COMMAND_H
+#define CHECK_COMMAND_H
 
 #include "include/Command.h"
-#include "include/RevokedMessage.h"
+#include "include/OrderInfoMessage.h"
+#include "include/FilledMessage.h"
 #include "include/Dealer.h"
 #include "include/exceptions.h"
 
-class RevokeCommand : public Command {
+class CheckCommand : public Command {
     Dealer dealer_;
     long orderId_;
 public:
-    RevokeCommand(const Dealer& dealer, long orderId)
+    CheckCommand(const Dealer& dealer, long orderId)
     : dealer_(dealer), orderId_(orderId) {}
 
     MessagePtr operator()(OrderStorePtr store) {
@@ -19,9 +20,11 @@ public:
             throw Unauthorized();
         }
 
-        store->remove(orderId_);
+        if (order->isFilled()) {
+            return MessagePtr(new FilledMessage(orderId_));
+        }
 
-        return MessagePtr(new RevokedMessage(orderId_));
+        return MessagePtr(new OrderInfoMessage(order));
     }
 };
 

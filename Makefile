@@ -77,15 +77,26 @@ main: $(OBJECTS) main.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $(MAIN_NAME)
 
 ####### TEST BUILD TARGETS ###################################
-TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
-			   test_OrderStore.o test_SharedPtr.o \
-			   test_CopyIf.o test_Message.o \
-			   test_FilledMessage.o test_RevokedMessage.o \
+TEST_OBJECTS = test_Order.o \
+			   test_Commodity.o \
+			   test_Dealer.o \
+			   test_OrderStore.o \
+			   test_SharedPtr.o \
+			   test_CopyIf.o \
+			   test_Message.o \
+			   test_FilledMessage.o \
+			   test_RevokedMessage.o \
 			   test_OrderInfoMessage.o \
 			   test_PostConfirmationMessage.o \
 			   test_OrderInfoListMessage.o \
 			   test_TradeReportMessage.o \
-			   test_RevokeCommand.o
+			   test_RevokeCommand.o \
+			   test_CheckCommand.o
+
+test_CheckCommand.o: $(TEST_DIR)/test_CheckCommand.cpp \
+		$(GMOCK_HEADERS) include/CheckCommand.h \
+		$(TEST_DIR)/MockOrderStore.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_CheckCommand.cpp -o $@
 
 test_RevokeCommand.o: $(TEST_DIR)/test_RevokeCommand.cpp \
 		$(GMOCK_HEADERS) include/RevokeCommand.h \
