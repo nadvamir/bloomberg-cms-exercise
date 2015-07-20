@@ -44,6 +44,10 @@ public:
     : commodity_(c), dealer_(d) {}
 
     MessagePtr operator()(OrderStorePtr store) {
+        if (!commodity_.isNull()) {
+            return MessagePtr(new OrderInfoListMessage(
+                store->filter(CommodityPred(commodity_))));
+        }
         if (commodity_.isNull() && dealer_ == Dealer()) {
             return MessagePtr(new OrderInfoListMessage(
                 store->filter(showAll)));

@@ -77,3 +77,14 @@ TEST_F(Slow_AListCommand, ReturnsAllOrdersByDefault) {
 
     ASSERT_THAT(ss.str(), StrEq(expected.str()));
 }
+
+TEST_F(Slow_AListCommand, ReturnsSpecifiedCommodityOrders) {
+    ListCommand cmd(CommodityPtr(new Gold));
+
+    stringstream ss, expected;
+    expected << jpmStr << "\n" << barxStr << "\nEND OF LIST";
+
+    ss << *cmd(store);
+
+    ASSERT_THAT(ss.str(), StrEq(expected.str()));
+}
