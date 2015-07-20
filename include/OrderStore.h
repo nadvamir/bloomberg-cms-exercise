@@ -9,6 +9,10 @@
 #include "include/Order.h"
 #include "include/exceptions.h"
 #include "include/CopyIf.h"
+#include "include/SharedPtr.h"
+
+class OrderStore;
+typedef SharedPtr<OrderStore> OrderStorePtr;
 
 class OrderStore {
     typedef std::map<long, OrderPtr> OrderMap;
