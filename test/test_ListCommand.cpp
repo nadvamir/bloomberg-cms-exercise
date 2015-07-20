@@ -67,7 +67,8 @@ TEST_F(Slow_AListCommand, CommodityAndDealerPredicateWorks) {
 }
 
 TEST_F(Slow_AListCommand, ReturnsAllOrdersByDefault) {
-    ListCommand cmd;
+    // FIXME: why can't I just create it here?
+    ListCommand cmd = ListCommand(CommodityPtr(), Dealer());
 
     stringstream ss, expected;
     expected << jpmStr << "\n" << silvStr << "\n"
@@ -79,7 +80,7 @@ TEST_F(Slow_AListCommand, ReturnsAllOrdersByDefault) {
 }
 
 TEST_F(Slow_AListCommand, ReturnsSpecifiedCommodityOrders) {
-    ListCommand cmd(CommodityPtr(new Gold));
+    ListCommand cmd(CommodityPtr(new Gold), Dealer());
 
     stringstream ss, expected;
     expected << jpmStr << "\n" << barxStr << "\nEND OF LIST";

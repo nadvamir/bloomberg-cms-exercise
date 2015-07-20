@@ -38,8 +38,6 @@ class ListCommand : public Command {
     CommodityPtr commodity_;
     Dealer dealer_;
 public:
-    ListCommand() {}
-    ListCommand(CommodityPtr c) : commodity_(c) {}
     ListCommand(CommodityPtr c, const Dealer& d)
     : commodity_(c), dealer_(d) {}
 

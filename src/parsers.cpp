@@ -89,7 +89,7 @@ CommandPtr parsePostCommand(istream& in, const Dealer& dealer) {
 }
 
 CommandPtr parseListCommand(istream& in, const Dealer&) {
-    return CommandPtr(new ListCommand);
+    return CommandPtr(new ListCommand(CommodityPtr(), Dealer()));
 }
 
 }
