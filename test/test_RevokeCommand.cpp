@@ -1,32 +1,11 @@
 #include "gmock/gmock.h"
 
-#include <string>
-
-#include "include/Command.h"
-#include "include/RevokedMessage.h"
-#include "include/Dealer.h"
 #include "include/exceptions.h"
+#include "include/RevokeCommand.h"
 #include "test/MockOrderStore.h"
 
 using namespace testing;
 using namespace std;
-
-class RevokeCommand : public Command {
-    Dealer dealer_;
-    long orderId_;
-public:
-    RevokeCommand(const Dealer& dealer, long orderId)
-    : dealer_(dealer), orderId_(orderId) {}
-
-    MessagePtr operator()(OrderStorePtr store) {
-        OrderPtr order = store->get(orderId_);
-        if (order->dealer() != dealer_) {
-            throw Unauthorized();
-        }
-
-        return MessagePtr();
-    }
-};
 
 class ARevokeCommand : public Test {
 public:
