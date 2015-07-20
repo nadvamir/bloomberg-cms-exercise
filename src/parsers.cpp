@@ -1,5 +1,6 @@
 #include <map>
 #include <algorithm>
+#include <stdexcept>
 
 #include "include/parsers.h"
 #include "include/Dealer.h"
@@ -8,6 +9,7 @@
 #include "include/AggressCommand.h"
 #include "include/PostCommand.h"
 #include "include/ListCommand.h"
+#include "include/exceptions.h"
 
 using namespace std;
 
@@ -41,8 +43,11 @@ struct CallbackPred : public unary_function<CallbackPair, bool> {
 }
 
 CommandPtr parseMessage(istream& in) {
+    in.exceptions(istream::failbit | istream::badbit);
     string dealerId, cmd;
-    in >> dealerId >> cmd;
+
+    try { in >> dealerId >> cmd; }
+    catch (istream::failure& e) { throw InvalidMessage(); }
 
     Dealer dealer(dealerId);
     CallbackPred pred(cmd);
@@ -59,30 +64,42 @@ CommandPtr parseMessage(istream& in) {
 namespace {
 
 CommandPtr parseRevokeCommand(istream& in, const Dealer& d) {
-    long id; in >> id;
+    long id;
+
+    try { in >> id; }
+    catch (istream::failure& e) { throw InvalidMessage(); }
+
     return CommandPtr(new RevokeCommand(d, id));
 }
 
 CommandPtr parseCheckCommand(istream& in, const Dealer& d) {
-    long id; in >> id;
+    long id;
+
+    try { in >> id; }
+    catch (istream::failure& e) { throw InvalidMessage(); }
+
     return CommandPtr(new CheckCommand(d, id));
 }
 
 CommandPtr parseAggressCommand(istream& in, const Dealer&) {
-    long id; in >> id;
-    int amount; in >> amount;
+    long id;
+    int amount;
+
+    try { in >> id >> amount; }
+    catch (istream::failure& e) { throw InvalidMessage(); }
+
     return CommandPtr(new AggressCommand(id, amount));
 }
 
 CommandPtr parsePostCommand(istream& in, const Dealer& dealer) {
-    string sside; in >> sside;
+    string sside, scommodity;
+    int amount; double price;
+
+    try { in >> sside >> scommodity >> amount >> price; }
+    catch (istream::failure& e) { throw InvalidMessage(); }
+
     Order::Side side = (sside == "BUY") ? Order::Buy : Order::Sell;
-
-    string scommodity; in >> scommodity;
     CommodityPtr commodity(getCommodity(scommodity));
-
-    int amount; in >> amount;
-    double price; in >> price;
 
     return CommandPtr(new PostCommand(
         dealer, side, commodity, amount, price));
@@ -90,16 +107,20 @@ CommandPtr parsePostCommand(istream& in, const Dealer& dealer) {
 
 CommandPtr parseListCommand(istream& in, const Dealer&) {
     CommodityPtr commodity;
-    string scommodity;
-    if (in >> scommodity) {
-        commodity = getCommodity(scommodity);
-    }
-
     Dealer dealer;
-    string dealerId;
-    if (in >> dealerId) {
-        dealer = Dealer(dealerId);
+    
+    try {
+        string scommodity, dealerId;
+        if (in >> scommodity) {
+            commodity = getCommodity(scommodity);
+        }
+
+        if (in >> dealerId) {
+            dealer = Dealer(dealerId);
+        }
     }
+    catch (istream::failure& e) {} // generous with list parsing
+
     return CommandPtr(new ListCommand(commodity, dealer));
 }
 
