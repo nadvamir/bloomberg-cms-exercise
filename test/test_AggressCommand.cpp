@@ -28,7 +28,7 @@ public:
         store = new MockOrderStore(); // destroyed by shared ptr
 
         jpmOrder = OrderPtr(new Order(
-            Dealer("JPM"), Order::Sell,
+            Dealer("JPM"), Order::Buy,
             CommodityPtr(new Gold),
             initAmount, price));
     }
@@ -44,18 +44,19 @@ TEST_F(AnAggressCommand, AggressedOnOrders) {
     ASSERT_THAT(jpmOrder->quantity(), Eq(initAmount - amount));
 }
 
-//TEST_F(AnAggressCommand, ReturnsTradeReportMessage) {
-//    AggressCommand cmd(orderId, amount);
-//    EXPECT_CALL(*store, get(orderId))
-//        .WillOnce(ReturnRef(jpmOrder));
-//
-//    stringstream ss, filled;
-//    ss << *cmd(store);
-//    filled << FilledMessage(orderId);
-//
-//    ASSERT_THAT(ss.str(), StrEq(filled.str()));
-//}
-//
+TEST_F(AnAggressCommand, ReturnsTradeReportMessage) {
+    AggressCommand cmd(orderId, amount);
+    EXPECT_CALL(*store, get(orderId))
+        .WillOnce(ReturnRef(jpmOrder));
+
+    stringstream ss, tradeR;
+    ss << *cmd(store);
+    tradeR << "SOLD " << amount << " GOLD @ "
+           << price << " FROM JPM";
+
+    ASSERT_THAT(ss.str(), StrEq(tradeR.str()));
+}
+
 //TEST_F(AnAggressCommand, ThrowsWhenRunOnNotOwnOrder) {
 //    AggressCommand cmd(ownId, orderId);
 //    EXPECT_CALL(*store, get(orderId))

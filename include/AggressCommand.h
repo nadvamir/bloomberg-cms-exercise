@@ -17,7 +17,18 @@ public:
 
         order->aggress(amount_);
 
-        return MessagePtr();
+        // order for reporting this trade
+        OrderPtr aggression(new Order(
+            order->dealer(),
+            opposite(order->side()),
+            order->commodity(), amount_, order->price()));
+
+        return MessagePtr(new TradeReportMessage(aggression));
+    }
+
+private:
+    Order::Side opposite(Order::Side side) {
+        return (side == Order::Buy) ? Order::Sell : Order::Buy;
     }
 };
 
