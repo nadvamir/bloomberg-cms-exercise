@@ -59,3 +59,15 @@ TEST_F(ACheckCommand, ReturnsFilledMessageWhenOrderIsFilled) {
 
     ASSERT_THAT(ss.str(), StrEq(filled.str()));
 }
+
+TEST_F(ACheckCommand, ReturnsOrderInfoMessageWhenOrderIsNotFilled) {
+    CheckCommand cmd(ownId, orderId);
+    EXPECT_CALL(*store, get(orderId))
+        .WillOnce(ReturnRef(jpmOrder));
+
+    stringstream ss, oinfo;
+    ss << *cmd(store);
+    oinfo << OrderInfoMessage(jpmOrder);
+
+    ASSERT_THAT(ss.str(), StrEq(oinfo.str()));
+}
