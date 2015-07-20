@@ -3,6 +3,7 @@
 
 #include "include/Command.h"
 #include "include/TradeReportMessage.h"
+#include "include/Order.h"
 #include "include/exceptions.h"
 
 class AggressCommand : public Command {
