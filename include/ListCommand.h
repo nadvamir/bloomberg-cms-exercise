@@ -17,6 +17,19 @@ struct CommodityPred : public std::unary_function<OrderPtr, bool> {
     }
 };
 
+// I miss lambdas so much...
+struct CommodityAndDealerPred
+: public std::unary_function<OrderPtr, bool> {
+    CommodityPtr commodity;
+    Dealer dealer;
+    CommodityAndDealerPred(CommodityPtr c, const Dealer& d)
+    : commodity(c), dealer(d) {}
+    bool operator()(const OrderPtr& o) const {
+        return *commodity == *(o->commodity())
+               && dealer == o->dealer();
+    }
+};
+
 class ListCommand : public Command {
     Dealer dealer_;
     long orderId_;

@@ -51,3 +51,11 @@ TEST_F(Slow_AListCommand, CommodityPredicateMatchesCommodities) {
     ASSERT_THAT(pred(jpmOrder), Eq(true));
     ASSERT_THAT(pred(silvOrder), Eq(false));
 }
+
+TEST_F(Slow_AListCommand, CommodityAndDealerPredicateWorks) {
+    CommodityAndDealerPred pred(CommodityPtr(new Gold), Dealer("JPM"));
+
+    ASSERT_THAT(pred(jpmOrder), Eq(true));
+    ASSERT_THAT(pred(silvOrder), Eq(false));
+    ASSERT_THAT(pred(barxOrder), Eq(false));
+}
