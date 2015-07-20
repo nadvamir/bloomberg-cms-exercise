@@ -13,6 +13,11 @@ public:
     UnknownOrder() : std::runtime_error("UNKNOWN_ORDER") {}
 };
 
+class UnknownCommodity : public std::runtime_error {
+public:
+    UnknownCommodity() : std::runtime_error("UNKNOWN_COMMODITY") {}
+};
+
 class UnknownDealer : public std::runtime_error {
 public:
     UnknownDealer() : std::runtime_error("UNKNOWN_DEALER") {}

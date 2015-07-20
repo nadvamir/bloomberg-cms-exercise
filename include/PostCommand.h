@@ -26,9 +26,12 @@ public:
         return MessagePtr(new PostConfirmationMessage(order));
     }
 
-private:
-    Order::Side opposite(Order::Side side) {
-        return (side == Order::Buy) ? Order::Sell : Order::Buy;
+    bool operator==(const PostCommand& cmd) const {
+        return dealer_ == cmd.dealer_
+            && side_ == cmd.side_
+            && *commodity_ == *(cmd.commodity_)
+            && amount_ == cmd.amount_
+            && price_ == cmd.price_;
     }
 };
 

@@ -6,6 +6,7 @@
 #include "include/RevokeCommand.h"
 #include "include/CheckCommand.h"
 #include "include/AggressCommand.h"
+#include "include/PostCommand.h"
 
 using namespace std;
 
@@ -14,13 +15,15 @@ namespace {
 CommandPtr parseRevokeCommand(istream&, const Dealer&);
 CommandPtr parseCheckCommand(istream&, const Dealer&);
 CommandPtr parseAggressCommand(istream&, const Dealer&);
+CommandPtr parsePostCommand(istream&, const Dealer&);
 
 typedef pair<string, CommandPtr (*)(istream&, const Dealer&)>
         CallbackPair;
 CallbackPair cmdParsers[] = {
     CallbackPair("REVOKE", parseRevokeCommand),
     CallbackPair("CHECK", parseCheckCommand),
-    CallbackPair("AGGRESS", parseAggressCommand)
+    CallbackPair("AGGRESS", parseAggressCommand),
+    CallbackPair("POST", parsePostCommand)
 };
 size_t CMD_N = sizeof cmdParsers / sizeof *cmdParsers;
 
@@ -68,5 +71,18 @@ CommandPtr parseAggressCommand(istream& in, const Dealer&) {
     return CommandPtr(new AggressCommand(id, amount));
 }
 
+CommandPtr parsePostCommand(istream& in, const Dealer& dealer) {
+    string sside; in >> sside;
+    Order::Side side = (sside == "BUY") ? Order::Buy : Order::Sell;
+
+    string scommodity; in >> scommodity;
+    CommodityPtr commodity(getCommodity(scommodity));
+
+    int amount; in >> amount;
+    double price; in >> price;
+
+    return CommandPtr(new PostCommand(
+        dealer, side, commodity, amount, price));
+}
 
 }

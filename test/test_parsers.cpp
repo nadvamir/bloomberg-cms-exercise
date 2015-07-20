@@ -6,6 +6,7 @@
 #include "include/RevokeCommand.h"
 #include "include/CheckCommand.h"
 #include "include/AggressCommand.h"
+#include "include/PostCommand.h"
 #include "include/parsers.h"
 #include "include/exceptions.h"
 
@@ -62,6 +63,16 @@ TEST(ParseMessage, ParsesAggressCommandCorrectly) {
     CommandPtr cmd = parseMessage(ss);
 
     AggressCommand *pCmd = dynamic_cast<AggressCommand*>(REPR(cmd));
+    ASSERT_THAT(*pCmd, Eq(expected));
+}
+
+TEST(ParseMessage, ParsesPostCommandCorrectly) {
+    PostCommand expected(Dealer("DB"), Order::Sell, 
+                         CommodityPtr(new Rice), 1, 10.5);
+    stringstream ss("DB POST SELL RICE 1 10.5");
+    CommandPtr cmd = parseMessage(ss);
+
+    PostCommand *pCmd = dynamic_cast<PostCommand*>(REPR(cmd));
     ASSERT_THAT(*pCmd, Eq(expected));
 }
 

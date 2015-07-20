@@ -10,7 +10,6 @@
 
 class Order;
 typedef SharedPtr<Order> OrderPtr;
-typedef SharedPtr<Commodity> CommodityPtr;
 
 class Order {
 public:
