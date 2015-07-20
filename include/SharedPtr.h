@@ -49,6 +49,10 @@ public:
     StoredType operator->() const { return ptr_; }
 
     bool isNull() { return ptr_ == NULL; }
+
+    friend StoredType REPR(const SharedPtr& p) {
+        return p.ptr_;
+    }
 };
 
 #endif
