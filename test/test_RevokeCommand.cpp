@@ -10,11 +10,13 @@ using namespace std;
 class ARevokeCommand : public Test {
 public:
     string ownId;
+    long orderId;
     MockOrderStore* store;
     OrderPtr jpmOrder, barxOrder;
 
     void SetUp() {
         ownId = "JPM";
+        orderId = 1;
         store = new MockOrderStore(); // destroyed by shared ptr
 
         jpmOrder = OrderPtr(new Order(
@@ -30,7 +32,6 @@ public:
 };
 
 TEST_F(ARevokeCommand, ThrowsWhenRunOnNotOwnOrder) {
-    long orderId = 1;
     RevokeCommand cmd(ownId, orderId);
     EXPECT_CALL(*store, get(orderId))
         .WillOnce(ReturnRef(barxOrder));
