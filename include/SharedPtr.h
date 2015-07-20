@@ -13,7 +13,8 @@ class SharedPtr {
 public:
     SharedPtr() : ptr_(NULL), refCount_(NULL) {}
 
-    explicit SharedPtr(StoredType ptr)
+    // Can't make it explicit to use it in tests...
+    SharedPtr(StoredType ptr)
     : ptr_(ptr), refCount_(new int(1)) {}
 
     SharedPtr(const SharedPtr& sptr)

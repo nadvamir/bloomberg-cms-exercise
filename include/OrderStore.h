@@ -22,15 +22,17 @@ class OrderStore {
 
 public:
     OrderStore() : lastId(0) {}
+    virtual ~OrderStore() {} // We need this class to be virtual
+                             // for testing purposes
 
-    long put(OrderPtr& order) {
+    virtual long put(OrderPtr& order) {
         long id = ++lastId;
         order->id(id);
         store.insert(std::make_pair(id, order));
         return id;
     }
 
-    OrderPtr& get(long id) {
+    virtual OrderPtr& get(long id) {
         OrderMap::iterator it = store.find(id);
         if (it == store.end()) {
             throw UnknownOrder();
@@ -38,7 +40,7 @@ public:
         return it->second;
     }
 
-    void remove(long id) {
+    virtual void remove(long id) {
         store.erase(id);
     }
 

@@ -84,7 +84,12 @@ TEST_OBJECTS = test_Order.o test_Commodity.o test_Dealer.o \
 			   test_OrderInfoMessage.o \
 			   test_PostConfirmationMessage.o \
 			   test_OrderInfoListMessage.o \
-			   test_TradeReportMessage.o
+			   test_TradeReportMessage.o \
+			   test_RevokeCommand.o
+
+test_RevokeCommand.o: $(TEST_DIR)/test_RevokeCommand.cpp \
+		$(GMOCK_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_RevokeCommand.cpp -o $@
 
 test_TradeReportMessage.o: $(TEST_DIR)/test_TradeReportMessage.cpp \
 		$(GMOCK_HEADERS) include/TradeReportMessage.h

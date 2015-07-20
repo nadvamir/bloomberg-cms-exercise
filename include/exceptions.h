@@ -3,6 +3,11 @@
 
 #include <stdexcept>
 
+class Unauthorized : public std::runtime_error {
+public:
+    Unauthorized() : std::runtime_error("UNAUTHORIZED") {}
+};
+
 class UnknownOrder : public std::runtime_error {
 public:
     UnknownOrder() : std::runtime_error("UNKNOWN_ORDER") {}
