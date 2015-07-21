@@ -28,14 +28,14 @@ int main(int argc, char **argv) {
 
     if (2 == argc && "base" == string(argv[1])) {
         workQueue->push(ChanelPtr(new StreamChanel(cin, cout)));
-        cout << "CMS<go> stdin edition ready!" << endl;
+        cout << "CMS<GO> 'stdin' edition ready!" << endl;
     }
     else if (3 == argc && "ext1" == string(argv[1])) {
         stringstream ss(argv[2]);
         int port; ss >> port;
         socket = SocketPtr(new Socket(port));
-        cout << "CMS<go> single socket on port " << port
-             << " edition ready!" << endl;
+        cout << "CMS<GO> 'single socket on port " << port
+             << "' edition ready!" << endl;
         workQueue->push(ChanelPtr(
             new NetworkChanel(socket->accept())));
     }

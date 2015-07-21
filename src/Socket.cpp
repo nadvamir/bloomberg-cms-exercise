@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #include <stdexcept>
 
@@ -25,6 +26,10 @@ Socket::Socket(int port) {
     if (listen(fd_, BACKLOG) == -1) {
         throw runtime_error("failed to start listenning");
     }
+}
+
+Socket::~Socket() {
+    close(fd_);
 }
 
 int Socket::accept() {

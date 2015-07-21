@@ -7,6 +7,7 @@ class Socket {
     int fd_;
 public:
     Socket(int port);
+    ~Socket();
 
     int fd() const { return fd_; }
 
