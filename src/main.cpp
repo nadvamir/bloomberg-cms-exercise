@@ -33,9 +33,12 @@ int main(int argc, char **argv) {
     else if (3 == argc && "ext1" == string(argv[1])) {
         stringstream ss(argv[2]);
         int port; ss >> port;
+
         socket = SocketPtr(new Socket(port));
+
         cout << "CMS<GO> 'single socket on port " << port
              << "' edition ready!" << endl;
+
         workQueue->push(ChanelPtr(
             new NetworkChanel(socket->accept())));
     }
