@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include "include/Lock.h"
+
 const bool THREAD_SAFE = true; // for clarity
 
 // not thread-safe implementation:
@@ -111,18 +113,18 @@ public:
     : ptr_(sptr.ptr_), refCount_(sptr.refCount_)
     , mutex_(sptr.mutex_) {
         if (NULL != refCount_) {
-            pthread_mutex_lock(mutex_);
+            Lock lock(mutex_);
             ++(*refCount_);
-            pthread_mutex_unlock(mutex_);
         }
     }
 
     SharedPtr<T, THREAD_SAFE>& operator=(
             const SharedPtr<T, THREAD_SAFE>& sptr) {
         if (NULL != refCount_) {
-            pthread_mutex_lock(mutex_);
-            --(*refCount_);
-            pthread_mutex_unlock(mutex_);
+            {
+                Lock lock(mutex_);
+                --(*refCount_);
+            }
 
             if (0 == *refCount_) { // won't go below 0, no lock needed
                 delete ptr_;
@@ -136,9 +138,8 @@ public:
         refCount_ = sptr.refCount_;
         mutex_ = sptr.mutex_;
         if (NULL != refCount_) {
-            pthread_mutex_lock(mutex_);
+            Lock lock(mutex_);
             ++(*refCount_);
-            pthread_mutex_unlock(mutex_);
         }
 
         return *this;
@@ -146,9 +147,10 @@ public:
 
     ~SharedPtr() {
         if (NULL != refCount_) {
-            pthread_mutex_lock(mutex_);
-            --(*refCount_);
-            pthread_mutex_unlock(mutex_);
+            {
+                Lock lock(mutex_);
+                --(*refCount_);
+            }
 
             if (0 == *refCount_) {
                 delete ptr_;
