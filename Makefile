@@ -92,7 +92,7 @@ main.o: src/main.cpp include/Chanel.h include/Socket.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/main.cpp -o $@
 
 main: $(OBJECTS) main.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $(MAIN_NAME)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $(MAIN_NAME)
 
 ####### TEST BUILD TARGETS ###################################
 TEST_OBJECTS = test_Order.o \

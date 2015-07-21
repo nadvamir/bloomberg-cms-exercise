@@ -16,7 +16,7 @@
 using namespace std;
 
 typedef queue<ChanelPtr> WorkQueue;
-typedef SharedPtr<WorkQueue> QueuePtr;
+typedef SharedPtr<WorkQueue, true> QueuePtr;
 
 void processConnections(QueuePtr& q, OrderStorePtr& store);
 void processConnection(ChanelPtr& chanel, OrderStorePtr& store);
