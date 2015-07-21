@@ -40,7 +40,8 @@ bool NetworkChanel::getline(std::string& line) {
 }
 
 void NetworkChanel::putline(const std::string& line) {
-    if (write(connfd_, line.c_str(), line.size()) == -1) {
+    string msg = line + "\n";
+    if (write(connfd_, msg.c_str(), msg.size()) == -1) {
         throw runtime_error("There was a problem in "
                             "sending the response");
     }
