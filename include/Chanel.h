@@ -9,6 +9,8 @@
 class Chanel;
 typedef SharedPtr<Chanel> ChanelPtr;
 
+const int MAX_LINE = 255;
+
 class Chanel {
 public:
     virtual ~Chanel() {}

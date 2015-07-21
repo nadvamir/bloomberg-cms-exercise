@@ -17,7 +17,8 @@ using namespace std;
 typedef queue<ChanelPtr> WorkQueue;
 typedef SharedPtr<WorkQueue> QueuePtr;
 
-void processRequests(QueuePtr& q, OrderStorePtr& store);
+void processConnections(QueuePtr& q, OrderStorePtr& store);
+void processConnection(ChanelPtr& chanel, OrderStorePtr& store);
 
 int main(int argc, char **argv) {
     QueuePtr workQueue(new WorkQueue());
@@ -39,34 +40,38 @@ int main(int argc, char **argv) {
 
     OrderStorePtr store(new OrderStore());
 
-    processRequests(workQueue, store);
+    processConnections(workQueue, store);
 
     return 0;
 }
 
-void processRequests(QueuePtr& q, OrderStorePtr& store) {
+void processConnections(QueuePtr& q, OrderStorePtr& store) {
     while (!q->empty()) {
         ChanelPtr chanel = q->front();
         q->pop();
 
-        string line;
-        while (chanel->getline(line)) {
-            try {
-                if (line.size() > 255) {
-                    throw InvalidMessage();
-                }
+        processConnection(chanel, store);
+    }
+}
 
-                stringstream ss(line);
-                CommandPtr cmd = parseMessage(ss);
-                MessagePtr msg = (*cmd)(store);
-
-                stringstream output;
-                output << *msg;
-
-                chanel->putline(output.str());
-            } catch (runtime_error& e) {
-                chanel->putline(e.what());
+void processConnection(ChanelPtr& chanel, OrderStorePtr& store) {
+    string line;
+    while (chanel->getline(line)) {
+        try {
+            if (line.size() > MAX_LINE) {
+                throw InvalidMessage();
             }
+
+            stringstream ss(line);
+            CommandPtr cmd = parseMessage(ss);
+            MessagePtr msg = (*cmd)(store);
+
+            stringstream output;
+            output << *msg;
+
+            chanel->putline(output.str());
+        } catch (runtime_error& e) {
+            chanel->putline(e.what());
         }
     }
 }
