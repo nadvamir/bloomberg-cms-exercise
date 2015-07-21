@@ -2,7 +2,6 @@
 #define LOCK_H
 
 #include <pthread.h>
-#include <unistd.h>
 
 class Lock {
     pthread_mutex_t* mutex_;

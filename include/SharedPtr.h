@@ -2,11 +2,10 @@
 #define SHARED_PTR_H
 
 #include <pthread.h>
-#include <unistd.h>
 
 #include "include/Lock.h"
 
-const bool THREAD_SAFE = true; // for clarity
+const bool THREAD_SAFE = true;
 
 // not thread-safe implementation:
 template <class T, bool ThreadSafe = !THREAD_SAFE>
