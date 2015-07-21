@@ -58,9 +58,11 @@ int main(int argc, char **argv) {
 }
 
 void processConnections(QueuePtr& q, OrderStorePtr& store) {
-    ChanelPtr chanel = q->pop();
-
-    processConnection(chanel, store);
+    ChanelPtr chanel;
+    while(q->pop(chanel)) {
+        processConnection(chanel, store);
+        q->reportDone();
+    }
 }
 
 void processConnection(ChanelPtr& chanel, OrderStorePtr& store) {

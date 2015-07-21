@@ -14,8 +14,12 @@ class WorkQueue {
     pthread_cond_t nonEmpty_;
 
     InnerQueue queue_;
+
+    enum State { Idle, Working, Closing };
+    State state_;
+    int numWorkers_;
 public:
-    WorkQueue() {
+    WorkQueue() : state_(Idle), numWorkers_(0) {
         pthread_mutexattr_t attr;
 
         pthread_mutexattr_init(&attr);
@@ -30,23 +34,39 @@ public:
         pthread_mutex_destroy(&mutex_);
     }
 
-    T pop() {
+    bool pop(T& item) {
         Lock lock(&mutex_);
 
         while (queue_.empty()) {
+            if (state_ == Closing) {
+                return false;
+            }
             pthread_cond_wait(&nonEmpty_, &mutex_);
         }
 
-        T item = queue_.front();
+        item = queue_.front();
         queue_.pop();
 
-        return item;
+        if (state_ == Idle) {
+            state_ = Working;
+        }
+        
+        ++numWorkers_;
+        return true;
     }
 
     void push(const T& item) {
         Lock lock(&mutex_);
         queue_.push(item);
         pthread_cond_signal(&nonEmpty_);
+    }
+
+    void reportDone() {
+        Lock lock(&mutex_);
+        if (0 == --numWorkers_ && queue_.empty()) {
+            state_ = Closing;
+            pthread_cond_broadcast(&nonEmpty_);
+        }
     }
 };
 
