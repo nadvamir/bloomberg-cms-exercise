@@ -1,6 +1,8 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
+#include "include/SharedPtr.h"
+
 class Socket {
     int fd_;
 public:
@@ -10,5 +12,7 @@ public:
 
     int accept();
 };
+
+typedef SharedPtr<Socket> SocketPtr;
 
 #endif
