@@ -34,4 +34,17 @@ public:
     }
 };
 
+// should have probably delegated to socket, but
+// this is easier to use
+class NetworkChanel : public Chanel {
+    int connfd_;
+public:
+    NetworkChanel(int connfd) : connfd_(connfd) {}
+    ~NetworkChanel();
+
+    bool getline(std::string& line);
+
+    void putline(const std::string& line);
+};
+
 #endif
