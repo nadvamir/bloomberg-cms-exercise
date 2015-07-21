@@ -10,6 +10,7 @@
 #include "include/OrderStore.h"
 #include "include/Message.h"
 #include "include/Chanel.h"
+#include "include/Socket.h"
 #include "include/SharedPtr.h"
 
 using namespace std;
@@ -22,6 +23,7 @@ void processConnection(ChanelPtr& chanel, OrderStorePtr& store);
 
 int main(int argc, char **argv) {
     QueuePtr workQueue(new WorkQueue());
+    OrderStorePtr store(new OrderStore());
 
     if (2 == argc && "base" == string(argv[1])) {
         workQueue->push(ChanelPtr(new StreamChanel(cin, cout)));
@@ -37,8 +39,6 @@ int main(int argc, char **argv) {
                 "| cms ext2 <port>" << endl;
         return 0;
     }
-
-    OrderStorePtr store(new OrderStore());
 
     processConnections(workQueue, store);
 
