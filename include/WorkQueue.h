@@ -38,7 +38,7 @@ public:
         }
 
         T item = queue_.front();
-        queue.pop();
+        queue_.pop();
 
         return item;
     }

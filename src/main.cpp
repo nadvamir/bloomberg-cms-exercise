@@ -12,17 +12,18 @@
 #include "include/Chanel.h"
 #include "include/Socket.h"
 #include "include/SharedPtr.h"
+#include "include/WorkQueue.h"
 
 using namespace std;
 
-typedef queue<ChanelPtr> WorkQueue;
-typedef SharedPtr<WorkQueue, THREAD_SAFE> QueuePtr;
+typedef WorkQueue<ChanelPtr> Queue;
+typedef SharedPtr<Queue> QueuePtr;
 
 void processConnections(QueuePtr& q, OrderStorePtr& store);
 void processConnection(ChanelPtr& chanel, OrderStorePtr& store);
 
 int main(int argc, char **argv) {
-    QueuePtr workQueue(new WorkQueue());
+    QueuePtr workQueue(new Queue());
     OrderStorePtr store(new OrderStore());
     SocketPtr socket;
 
@@ -57,12 +58,9 @@ int main(int argc, char **argv) {
 }
 
 void processConnections(QueuePtr& q, OrderStorePtr& store) {
-    while (!q->empty()) {
-        ChanelPtr chanel = q->front();
-        q->pop();
+    ChanelPtr chanel = q->pop();
 
-        processConnection(chanel, store);
-    }
+    processConnection(chanel, store);
 }
 
 void processConnection(ChanelPtr& chanel, OrderStorePtr& store) {
