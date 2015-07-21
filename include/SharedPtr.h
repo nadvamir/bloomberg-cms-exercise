@@ -48,11 +48,11 @@ public:
         }
     }
 
-    ReferenceType operator*() { return *ptr_; }
-    const ReferenceType operator*() const { return *ptr_; }
+    ReferenceType operator*() const { return *ptr_; }
 
-    StoredType operator->() { return ptr_; }
-    StoredType operator->() const { return ptr_; }
+    StoredType operator->() const {
+        return ptr_;
+    }
 
     bool isNull() const { return ptr_ == NULL; }
 
@@ -90,7 +90,7 @@ class SharedPtr<T, true> {
         pthread_mutex_t* mutex_;
     };
 
-    typedef LockingProxy<T>& PointedType;
+    typedef LockingProxy<T> PointedType;
 
 public:
     SharedPtr() : ptr_(NULL), refCount_(NULL), mutex_(NULL) {}
@@ -98,7 +98,11 @@ public:
     SharedPtr(StoredType ptr)
     : ptr_(ptr), refCount_(new int(1))
     , mutex_(new pthread_mutex_t) {
-        pthread_mutex_init(mutex_, NULL);
+        pthread_mutexattr_t attr;
+
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+        pthread_mutex_init(mutex_, &attr);
     }
 
     SharedPtr(const SharedPtr<T, true>& sptr)
@@ -111,7 +115,7 @@ public:
         }
     }
 
-    SharedPtr<T>& operator=(const SharedPtr<T, true>& sptr) {
+    SharedPtr<T, true>& operator=(const SharedPtr<T, true>& sptr) {
         if (NULL != refCount_) {
             pthread_mutex_lock(mutex_);
             --(*refCount_);
@@ -121,6 +125,7 @@ public:
                 delete ptr_;
                 delete refCount_;
                 pthread_mutex_destroy(mutex_);
+                delete mutex_;
             }
         }
 
@@ -137,7 +142,6 @@ public:
     }
 
     ~SharedPtr() {
-        std::cout << "multithreaded" << std::endl;
         if (NULL != refCount_) {
             pthread_mutex_lock(mutex_);
             --(*refCount_);
@@ -147,6 +151,7 @@ public:
                 delete ptr_;
                 delete refCount_;
                 pthread_mutex_destroy(mutex_);
+                delete mutex_;
             }
         }
     }

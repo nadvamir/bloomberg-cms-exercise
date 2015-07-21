@@ -33,6 +33,10 @@ struct Base {
 struct Derived : Base {
     virtual int f() { return 2; }
 };
+
+struct Data {
+    int a, b;
+};
 }
 
 int TestStruct::constructionCount = 0;
@@ -119,8 +123,11 @@ TEST_F(ASharedPtr, SupportsPolymorphism) {
     ASSERT_THAT(base->f(), Eq(Derived().f()));
 }
 
-TEST_F(ASharedPtr, CanBeThreadSafe) {
-    SharedPtr<Base, true> ptr(new Base());
+TEST_F(ASharedPtr, CanBeThreadSafeWithRecursiveMutex) {
+    SharedPtr<Data, true> ptr(new Data());
+    ptr->a = 5;
+    ptr->b = 10;
+    ASSERT_TRUE(ptr->a < ptr->b);
     // a proper test would require me to mix in
     // another template parameter to suply my own
     // locking class
