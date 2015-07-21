@@ -82,7 +82,8 @@ Dealer.o: src/Dealer.cpp include/Dealer.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Dealer.cpp -o $@
 
 # a file containing main()
-main.o: src/main.cpp
+main.o: src/main.cpp \
+	include/LineReader.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/main.cpp -o $@
 
 main: $(OBJECTS) main.o
