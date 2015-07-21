@@ -10,14 +10,14 @@
 #include "include/exceptions.h"
 
 namespace {
-bool showAll(OrderPtr) { return true; }
+bool showAll(const OrderPtr& o) { return !o->isFilled(); }
 }
 
 struct CommodityPred : public std::unary_function<OrderPtr, bool> {
     CommodityPtr commodity;
     CommodityPred(CommodityPtr c) : commodity(c) {}
     bool operator()(const OrderPtr& o) const {
-        return *commodity == *(o->commodity());
+        return *commodity == *(o->commodity()) && !o->isFilled();
     }
 };
 
@@ -30,7 +30,7 @@ struct CommodityAndDealerPred
     : commodity(c), dealer(d) {}
     bool operator()(const OrderPtr& o) const {
         return *commodity == *(o->commodity())
-               && dealer == o->dealer();
+               && dealer == o->dealer() && !o->isFilled();
     }
 };
 

@@ -79,6 +79,19 @@ TEST_F(Slow_AListCommand, ReturnsAllOrdersByDefault) {
     ASSERT_THAT(ss.str(), StrEq(expected.str()));
 }
 
+TEST_F(Slow_AListCommand, DoesNotIncludeFilledOrders) {
+    // FIXME: why can't I just create it here?
+    ListCommand cmd = ListCommand(CommodityPtr(), Dealer());
+    silvOrder->aggress(100);
+
+    stringstream ss, expected;
+    expected << jpmStr << "\n" << barxStr << "\nEND OF LIST";
+
+    ss << *cmd(store);
+
+    ASSERT_THAT(ss.str(), StrEq(expected.str()));
+}
+
 TEST_F(Slow_AListCommand, ReturnsSpecifiedCommodityOrders) {
     ListCommand cmd(CommodityPtr(new Gold), Dealer());
 
