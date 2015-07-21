@@ -118,3 +118,10 @@ TEST_F(ASharedPtr, SupportsPolymorphism) {
 
     ASSERT_THAT(base->f(), Eq(Derived().f()));
 }
+
+TEST_F(ASharedPtr, CanBeThreadSafe) {
+    SharedPtr<Base, true> ptr(new Base());
+    // a proper test would require me to mix in
+    // another template parameter to suply my own
+    // locking class
+}
