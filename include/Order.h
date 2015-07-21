@@ -9,7 +9,7 @@
 #include "include/SharedPtr.h"
 
 class Order;
-typedef SharedPtr<Order, true> OrderPtr;
+typedef SharedPtr<Order, THREAD_SAFE> OrderPtr;
 
 class Order {
 public:

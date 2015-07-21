@@ -12,7 +12,7 @@
 #include "include/SharedPtr.h"
 
 class OrderStore;
-typedef SharedPtr<OrderStore, true> OrderStorePtr;
+typedef SharedPtr<OrderStore, THREAD_SAFE> OrderStorePtr;
 
 class OrderStore {
     typedef std::map<long, OrderPtr> OrderMap;

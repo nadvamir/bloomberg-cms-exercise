@@ -4,8 +4,10 @@
 #include <pthread.h>
 #include <unistd.h>
 
+const bool THREAD_SAFE = true; // for clarity
+
 // not thread-safe implementation:
-template <class T, bool Multithreaded = false>
+template <class T, bool ThreadSafe = !THREAD_SAFE>
 class SharedPtr {
     typedef T* StoredType;
     typedef T& ReferenceType;
@@ -63,7 +65,7 @@ public:
 
 // thread-safe specialisation
 template <class T>
-class SharedPtr<T, true> {
+class SharedPtr<T, THREAD_SAFE> {
     typedef T* StoredType;
     typedef T& ReferenceType;
 
@@ -105,7 +107,7 @@ public:
         pthread_mutex_init(mutex_, &attr);
     }
 
-    SharedPtr(const SharedPtr<T, true>& sptr)
+    SharedPtr(const SharedPtr<T, THREAD_SAFE>& sptr)
     : ptr_(sptr.ptr_), refCount_(sptr.refCount_)
     , mutex_(sptr.mutex_) {
         if (NULL != refCount_) {
@@ -115,7 +117,8 @@ public:
         }
     }
 
-    SharedPtr<T, true>& operator=(const SharedPtr<T, true>& sptr) {
+    SharedPtr<T, THREAD_SAFE>& operator=(
+            const SharedPtr<T, THREAD_SAFE>& sptr) {
         if (NULL != refCount_) {
             pthread_mutex_lock(mutex_);
             --(*refCount_);
@@ -164,7 +167,7 @@ public:
 
     bool isNull() const { return ptr_ == NULL; }
 
-    friend StoredType REPR(const SharedPtr<T, true>& p) {
+    friend StoredType REPR(const SharedPtr<T, THREAD_SAFE>& p) {
         return p.ptr_;
     }
 
