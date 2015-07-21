@@ -9,12 +9,12 @@
 #include "include/Command.h"
 #include "include/OrderStore.h"
 #include "include/Message.h"
-#include "include/LineReader.h"
+#include "include/Chanel.h"
 #include "include/SharedPtr.h"
 
 using namespace std;
 
-typedef queue<LineReaderPtr> WorkQueue;
+typedef queue<ChanelPtr> WorkQueue;
 typedef SharedPtr<WorkQueue> QueuePtr;
 
 void processRequests(QueuePtr& q, OrderStorePtr& store);
@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     QueuePtr workQueue(new WorkQueue());
 
     if (2 == argc && "base" == string(argv[1])) {
-        workQueue->push(LineReaderPtr(new StreamLineReader(cin)));
+        workQueue->push(ChanelPtr(new StreamChanel(cin, cout)));
     }
     else if (3 == argc && "ext1" == string(argv[1])) {
         return 1;
@@ -46,11 +46,11 @@ int main(int argc, char **argv) {
 
 void processRequests(QueuePtr& q, OrderStorePtr& store) {
     while (!q->empty()) {
-        LineReaderPtr reader = q->front();
+        ChanelPtr chanel = q->front();
         q->pop();
 
         string line;
-        while (reader->getline(line)) {
+        while (chanel->getline(line)) {
             try {
                 if (line.size() > 255) {
                     throw InvalidMessage();
@@ -59,9 +59,13 @@ void processRequests(QueuePtr& q, OrderStorePtr& store) {
                 stringstream ss(line);
                 CommandPtr cmd = parseMessage(ss);
                 MessagePtr msg = (*cmd)(store);
-                cout << *msg << endl;
+
+                stringstream output;
+                output << *msg;
+
+                chanel->putline(output.str());
             } catch (runtime_error& e) {
-                cout << e.what() << endl;
+                chanel->putline(e.what());
             }
         }
     }
