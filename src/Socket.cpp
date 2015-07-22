@@ -33,10 +33,11 @@ Socket::~Socket() {
 }
 
 int Socket::accept() {
-    struct sockaddr_in cliaddr;
+    sockaddr_in cliaddr;
     socklen_t cliaddr_len = sizeof(cliaddr);
 
-    int connfd = ::accept(fd_, (struct sockaddr *) &cliaddr,
+    int connfd = ::accept(fd_,
+                          reinterpret_cast<sockaddr*>(&cliaddr),
                           &cliaddr_len);
 
     if (connfd == -1) {
@@ -57,19 +58,21 @@ int create() {
 
     // tell socket to release the connection after shutting down
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
-               (char*)&iSetOption, sizeof(iSetOption));
+               reinterpret_cast<char*>(&iSetOption),
+               sizeof(iSetOption));
 
     return fd;
 }
 
 void bind(int fd, int port) {
-    struct sockaddr_in addr;
+    sockaddr_in addr;
 
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
 
-    if (bind(fd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
+    if (bind(fd, reinterpret_cast<sockaddr*>(&addr),
+             sizeof(addr)) == -1) {
         throw runtime_error("unable to bind a "
                             "socket as a TCP/IP server");
     }
