@@ -64,7 +64,8 @@ clean :
 	rm -f $(MAIN_NAME) $(TESTS) gmock.a gmock_main.a *.o
 
 ####### BUILD TARGETS ########################################
-OBJECTS = Dealer.o Commodity.o parsers.o Socket.o Chanel.o
+OBJECTS = Dealer.o Commodity.o parsers.o Socket.o Chanel.o \
+		  OrderStore.o
 
 parsers.o: src/parsers.cpp include/parsers.h \
 		include/Command.h \
@@ -86,6 +87,9 @@ Commodity.o: src/Commodity.cpp include/Commodity.h
 
 Dealer.o: src/Dealer.cpp include/Dealer.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Dealer.cpp -o $@
+
+OrderStore.o: src/OrderStore.cpp include/OrderStore.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/OrderStore.cpp -o $@
 
 # a file containing main()
 main.o: src/main.cpp include/Chanel.h include/Socket.h

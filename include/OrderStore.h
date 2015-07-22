@@ -7,9 +7,9 @@
 #include <vector>
 
 #include "include/Order.h"
+#include "include/SharedPtr.h"
 #include "include/exceptions.h"
 #include "include/CopyIf.h"
-#include "include/SharedPtr.h"
 
 class OrderStore;
 typedef SharedPtr<OrderStore, THREAD_SAFE> OrderStorePtr;
@@ -25,43 +25,16 @@ public:
     virtual ~OrderStore() {} // We need this class to be virtual
                              // for testing purposes
 
-    virtual long put(OrderPtr& order) {
-        long id = ++lastId;
-        order->id(id);
-        store.insert(std::make_pair(id, order));
-        return id;
-    }
+    virtual long put(OrderPtr& order);
 
-    virtual OrderPtr& get(long id) {
-        OrderMap::iterator it = store.find(id);
-        if (it == store.end()) {
-            throw UnknownOrder();
-        }
-        return it->second;
-    }
+    virtual OrderPtr& get(long id);
 
     virtual void remove(long id) {
         store.erase(id);
     }
 
     template<class UnaryPred>
-    std::vector<OrderPtr> filter(UnaryPred pred) {
-        std::vector<OrderPair> filtered;
-        copy_if(
-            store.begin(),
-            store.end(),
-            back_inserter(filtered),
-            PredAdaptor<UnaryPred>(pred));
-
-        std::vector<OrderPtr> orders;
-        transform(
-            filtered.begin(),
-            filtered.end(),
-            back_inserter(orders),
-            OrderStore::pair2Order);
-
-        return orders;
-    }
+    std::vector<OrderPtr> filter(UnaryPred pred);
 
 private:
     static OrderPtr& pair2Order(OrderPair& el) {
@@ -69,13 +42,35 @@ private:
     }
 
     template<class UnaryPred>
-    struct PredAdaptor {
-        UnaryPred pred;
-        PredAdaptor(UnaryPred p) : pred(p) {}
-        bool operator()(OrderMap::value_type& el) {
-            return pred(el.second);
-        }
-    };
+    struct PredAdaptor;
 };
+
+template<class UnaryPred>
+struct OrderStore::PredAdaptor {
+    UnaryPred pred;
+    PredAdaptor(UnaryPred p) : pred(p) {}
+    bool operator()(OrderMap::value_type& el) {
+        return pred(el.second);
+    }
+};
+
+template<class UnaryPred>
+std::vector<OrderPtr> OrderStore::filter(UnaryPred pred) {
+    std::vector<OrderPair> filtered;
+    copy_if(
+        store.begin(),
+        store.end(),
+        back_inserter(filtered),
+        PredAdaptor<UnaryPred>(pred));
+
+    std::vector<OrderPtr> orders;
+    transform(
+        filtered.begin(),
+        filtered.end(),
+        back_inserter(orders),
+        OrderStore::pair2Order);
+
+    return orders;
+}
 
 #endif
