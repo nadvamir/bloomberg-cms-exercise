@@ -16,8 +16,6 @@ CommodityPtr getCommodity(std::string name);
 // exercise; however, in pursuing this design I got to play
 // with multiple dispatch along the way (which proved to be
 // unnecessary and was later removed).
-// I leave this overkill version of Commodity because
-// it is more *future proof*.
 
 class Commodity {
     virtual const char* getTag() const = 0;

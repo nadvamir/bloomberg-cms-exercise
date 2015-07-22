@@ -65,9 +65,11 @@ clean :
 
 ####### BUILD TARGETS ########################################
 OBJECTS = Dealer.o Commodity.o parsers.o Socket.o Chanel.o \
-		  OrderStore.o WorkQueue.o
+		  OrderStore.o
 
 parsers.o: src/parsers.cpp include/parsers.h \
+		include/exceptions.h \
+		include/Dealer.h \
 		include/Command.h \
 		include/ListCommand.h \
 		include/RevokeCommand.h \
@@ -76,26 +78,41 @@ parsers.o: src/parsers.cpp include/parsers.h \
 		include/CheckCommand.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/parsers.cpp -o $@
 
-Chanel.o: src/Chanel.cpp include/Chanel.h
+Chanel.o: src/Chanel.cpp include/Chanel.h \
+		include/SharedPtr.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Chanel.cpp -o $@
 
 Socket.o: src/Socket.cpp include/Socket.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Socket.cpp -o $@
 
-Commodity.o: src/Commodity.cpp include/Commodity.h
+Commodity.o: src/Commodity.cpp include/Commodity.h \
+		include/SharedPtr.h \
+		include/exceptions.h 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Commodity.cpp -o $@
 
-Dealer.o: src/Dealer.cpp include/Dealer.h
+Dealer.o: src/Dealer.cpp include/Dealer.h \
+		include/exceptions.h 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Dealer.cpp -o $@
 
-WorkQueue.o: src/WorkQueue.cpp include/WorkQueue.h
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/WorkQueue.cpp -o $@
-
-OrderStore.o: src/OrderStore.cpp include/OrderStore.h
+OrderStore.o: src/OrderStore.cpp include/OrderStore.h \
+		include/Order.h \
+		include/SharedPtr.h \
+		include/exceptions.h \
+		include/CopyIf.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/OrderStore.cpp -o $@
 
 # a file containing main()
-main.o: src/main.cpp include/Chanel.h include/Socket.h
+main.o: src/main.cpp \
+		include/Chanel.h \
+		include/Socket.h \
+		include/OrderStore.h \
+		include/Message.h \
+		include/Command.h \
+		include/WorkQueue.h \
+		include/ThreadPool.h \
+		include/parsers.h \
+		include/SharedPtr.h \
+		include/exceptions.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/main.cpp -o $@
 
 main: $(OBJECTS) main.o
@@ -123,48 +140,64 @@ TEST_OBJECTS = test_Order.o \
 			   test_parsers.o
 
 test_parsers.o: $(TEST_DIR)/test_parsers.cpp \
-		$(GMOCK_HEADERS) include/parsers.h 
+		$(GMOCK_HEADERS) include/parsers.h \
+		include/Command.h \
+		include/ListCommand.h \
+		include/RevokeCommand.h \
+		include/AggressCommand.h \
+		include/PostCommand.h \
+		include/CheckCommand.h \
+		include/exceptions.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_parsers.cpp -o $@
 
 test_ListCommand.o: $(TEST_DIR)/test_ListCommand.cpp \
 		$(GMOCK_HEADERS) include/ListCommand.h \
-		$(TEST_DIR)/MockOrderStore.h
+		include/OrderStore.h \
+		include/exceptions.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_ListCommand.cpp -o $@
 
 test_PostCommand.o: $(TEST_DIR)/test_PostCommand.cpp \
 		$(GMOCK_HEADERS) include/PostCommand.h \
+		include/exceptions.h \
 		$(TEST_DIR)/MockOrderStore.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_PostCommand.cpp -o $@
 
 test_AggressCommand.o: $(TEST_DIR)/test_AggressCommand.cpp \
 		$(GMOCK_HEADERS) include/AggressCommand.h \
+		include/exceptions.h \
 		$(TEST_DIR)/MockOrderStore.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_AggressCommand.cpp -o $@
 
 test_CheckCommand.o: $(TEST_DIR)/test_CheckCommand.cpp \
 		$(GMOCK_HEADERS) include/CheckCommand.h \
+		include/exceptions.h \
 		$(TEST_DIR)/MockOrderStore.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_CheckCommand.cpp -o $@
 
 test_RevokeCommand.o: $(TEST_DIR)/test_RevokeCommand.cpp \
 		$(GMOCK_HEADERS) include/RevokeCommand.h \
+		include/exceptions.h \
 		$(TEST_DIR)/MockOrderStore.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_RevokeCommand.cpp -o $@
 
 test_TradeReportMessage.o: $(TEST_DIR)/test_TradeReportMessage.cpp \
-		$(GMOCK_HEADERS) include/TradeReportMessage.h
+		$(GMOCK_HEADERS) include/TradeReportMessage.h \
+		include/Order.h 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_TradeReportMessage.cpp -o $@
 
 test_OrderInfoListMessage.o: $(TEST_DIR)/test_OrderInfoListMessage.cpp \
-		$(GMOCK_HEADERS) include/OrderInfoListMessage.h
+		$(GMOCK_HEADERS) include/OrderInfoListMessage.h \
+		include/Order.h 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_OrderInfoListMessage.cpp -o $@
 
 test_PostConfirmationMessage.o: $(TEST_DIR)/test_PostConfirmationMessage.cpp \
-		$(GMOCK_HEADERS) include/PostConfirmationMessage.h
+		$(GMOCK_HEADERS) include/PostConfirmationMessage.h \
+		include/Order.h 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_PostConfirmationMessage.cpp -o $@
 
 test_OrderInfoMessage.o: $(TEST_DIR)/test_OrderInfoMessage.cpp \
-		$(GMOCK_HEADERS) include/OrderInfoMessage.h
+		$(GMOCK_HEADERS) include/OrderInfoMessage.h \
+		include/Order.h 
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_OrderInfoMessage.cpp -o $@
 
 test_RevokedMessage.o: $(TEST_DIR)/test_RevokedMessage.cpp \
@@ -176,7 +209,7 @@ test_FilledMessage.o: $(TEST_DIR)/test_FilledMessage.cpp \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_FilledMessage.cpp -o $@
 
 test_Message.o: $(TEST_DIR)/test_Message.cpp $(GMOCK_HEADERS) \
-		include/Message.h
+		include/Message.h include/FilledMessage.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(TEST_DIR)/test_Message.cpp -o $@
 
 test_CopyIf.o: $(TEST_DIR)/test_CopyIf.cpp $(GMOCK_HEADERS) \
