@@ -7,7 +7,10 @@
 
 const bool THREAD_SAFE = true;
 
+// Beware, things will get messy.
+//-----------------------------------------------------------------
 // not thread-safe implementation:
+//-----------------------------------------------------------------
 template <class T, bool ThreadSafe = !THREAD_SAFE>
 class SharedPtr {
     typedef T* StoredType;
@@ -29,20 +32,7 @@ public:
         }
     }
 
-    SharedPtr<T>& operator=(const SharedPtr<T>& sptr) {
-        if (NULL != refCount_ && 0 == --(*refCount_)) {
-            delete ptr_;
-            delete refCount_;
-        }
-
-        ptr_ = sptr.ptr_;
-        refCount_ = sptr.refCount_;
-        if (NULL != refCount_) {
-            ++(*refCount_);
-        }
-
-        return *this;
-    }
+    SharedPtr<T>& operator=(const SharedPtr<T>& sptr);
 
     ~SharedPtr() {
         if (NULL != refCount_ && 0 == --(*refCount_)) {
@@ -64,7 +54,9 @@ public:
     }
 };
 
+//-----------------------------------------------------------------
 // thread-safe specialisation
+//-----------------------------------------------------------------
 template <class T>
 class SharedPtr<T, THREAD_SAFE> {
     typedef T* StoredType;
@@ -75,25 +67,8 @@ class SharedPtr<T, THREAD_SAFE> {
 
     pthread_mutex_t* mutex_;
 
-    // a proxy lock used as a temporary object
-    // for operator->
-    template<class T_>
-    class LockingProxy {
-    public:
-        LockingProxy(T_* pObj, pthread_mutex_t* mutex)
-        : pointee_(pObj), mutex_(mutex) {
-            pthread_mutex_lock(mutex_);
-        }
-        ~LockingProxy() {
-            pthread_mutex_unlock(mutex_);
-        }
-        T_* operator->() const { return pointee_; }
-    private:
-        T_* pointee_;
-        pthread_mutex_t* mutex_;
-    };
-
-    typedef LockingProxy<T> PointedType;
+    // a proxy lock used as a temporary object for operator->
+    template<class T_> class LockingProxy;
 
 public:
     SharedPtr() : ptr_(NULL), refCount_(NULL), mutex_(NULL) {}
@@ -117,52 +92,14 @@ public:
         }
     }
 
-    SharedPtr<T, THREAD_SAFE>& operator=(
-            const SharedPtr<T, THREAD_SAFE>& sptr) {
-        if (NULL != refCount_) {
-            {
-                Lock lock(mutex_);
-                --(*refCount_);
-            }
+    SharedPtr<T, THREAD_SAFE>&
+    operator=(const SharedPtr<T, THREAD_SAFE>& sptr);
 
-            if (0 == *refCount_) { // won't go below 0, no lock needed
-                delete ptr_;
-                delete refCount_;
-                pthread_mutex_destroy(mutex_);
-                delete mutex_;
-            }
-        }
-
-        ptr_ = sptr.ptr_;
-        refCount_ = sptr.refCount_;
-        mutex_ = sptr.mutex_;
-        if (NULL != refCount_) {
-            Lock lock(mutex_);
-            ++(*refCount_);
-        }
-
-        return *this;
-    }
-
-    ~SharedPtr() {
-        if (NULL != refCount_) {
-            {
-                Lock lock(mutex_);
-                --(*refCount_);
-            }
-
-            if (0 == *refCount_) {
-                delete ptr_;
-                delete refCount_;
-                pthread_mutex_destroy(mutex_);
-                delete mutex_;
-            }
-        }
-    }
+    ~SharedPtr();
 
     ReferenceType operator*() const { return *ptr_; }
 
-    PointedType operator->() const {
+    LockingProxy<T> operator->() const {
         return LockingProxy<T>(ptr_, mutex_);
     }
 
@@ -173,5 +110,10 @@ public:
     }
 
 };
+
+//-----------------------------------------------------------------
+// implementation of non-inline functions:
+//-----------------------------------------------------------------
+#include "include/SharedPtr.impl.h"
 
 #endif
