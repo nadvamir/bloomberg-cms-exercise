@@ -17,7 +17,7 @@ TESTS = tests.exe
 TEST_DIR = test
 
 # name of the executable
-MAIN_NAME = cms.exe
+MAIN_NAME = cms
 
 # Please tweak the following variable definitions as needed by your
 # project, except GMOCK_HEADERS and GTEST_HEADERS, which you can use
@@ -56,7 +56,7 @@ GMOCK_HEADERS = $(GMOCK_DIR)/include/gmock/*.h \
 ###### TARGETS ###############################################
 # House-keeping build targets.
 
-all : main $(TESTS)
+all : main
 
 test : $(TESTS)
 
