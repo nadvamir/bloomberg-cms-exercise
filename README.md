@@ -75,20 +75,18 @@ In completing this exercise I tried to achieve the following:
 * Examine TDD as a design technique and investigate its applicability to C++.
 * Make use of at least some of advanced meta-programming concepts outlined in Alexandrescu's "Modern C++ Design" book. If it takes so much mental effort to read, you should better learn something...
 * Learn to use STL for everything I can.
-* Investigate command pattern.
+* Practice implementing the command pattern.
 * Investigate how different designs of basic building blocks (Commodity, Dealer, and Order::Side) affect the overall program.
-
-In retrospect, I think I have achieved these goals.
 
 ## Design of the system
 
-I used test-driven development as a design technique when writing this code, so there was no strong initial preconception on how will this system look. In the following state of program, these are the main entities.
+I used test-driven development as a design technique when writing this code, so there was no strong initial preconception on how this system will look. In the following state of program, these are the main entities.
 
 ### Repository layout
 
 * include/ -> all the header files, but also most of the implementation, since the code was heavily inlined to speed up the development.
 * src/ -> occasional *.cpp files + main.cpp
-* test/ -> all GoogleMock tests. Base exercise was test-driven, and thus is thoroughly tested. I did not write tests for networking and multithreading code for the lack of time.
+* test/ -> all GoogleMock tests. Base exercise was test-driven, and thus is thoroughly tested. I did not write tests for networking and multithreading code due to the lack of time.
 
 ### Data
 
