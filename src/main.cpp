@@ -46,7 +46,6 @@ void processConnection(ChanelPtr& chanel, OrderStorePtr& store);
 int main(int argc, char **argv) {
     QueuePtr workQueue(new Queue());
     OrderStorePtr store(new OrderStore());
-    SocketPtr socket;
     ThreadPoolPtr tpool;
     ThreadPoolPtr producerThread;
     ThreadData td = { workQueue, store };
@@ -64,7 +63,7 @@ int main(int argc, char **argv) {
         stringstream ss(argv[2]);
         int port; ss >> port;
 
-        socket = SocketPtr(new Socket(port));
+        SocketPtr socket(new Socket(port));
 
         tpool = ThreadPoolPtr(new ThreadPool(1, worker, &td));
 
@@ -82,7 +81,7 @@ int main(int argc, char **argv) {
         stringstream ss(argv[2]);
         int port; ss >> port;
 
-        socket = SocketPtr(new Socket(port));
+        SocketPtr socket(new Socket(port));
 
         tpool = ThreadPoolPtr(
             new ThreadPool(NUM_THREADS, worker, &td));
