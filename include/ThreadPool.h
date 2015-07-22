@@ -11,11 +11,10 @@ typedef void* (*WORK_F)(void*);
 
 // sharing same data piece is acceptable in our case,
 // since we only share pointers which we don't modify directly
-template<class Data>
 class ThreadPool {
     std::vector<pthread_t> tpool;
 public:
-    ThreadPool(int size, WORK_F workF, Data* data) : tpool(size) {
+    ThreadPool(int size, WORK_F workF, void* data) : tpool(size) {
         for (int i = 0; i < size; ++i) {
             if (pthread_create(&tpool[i], NULL, workF, data)) {
                 throw std::runtime_error("Failed to create thread!");

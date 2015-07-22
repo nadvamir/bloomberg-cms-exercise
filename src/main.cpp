@@ -25,8 +25,7 @@ struct ThreadData {
     OrderStorePtr store;
 };
 
-typedef ThreadPool<ThreadData> WorkThreadPool;
-typedef SharedPtr<WorkThreadPool> ThreadPoolPtr;
+typedef SharedPtr<ThreadPool> ThreadPoolPtr;
 
 void* worker(void*);
 void processConnections(QueuePtr& q, OrderStorePtr& store);
@@ -41,7 +40,7 @@ int main(int argc, char **argv) {
 
     if (2 == argc && "base" == string(argv[1])) {
         workQueue->push(ChanelPtr(new StreamChanel(cin, cout)));
-        tpool = ThreadPoolPtr(new WorkThreadPool(1, worker, &td));
+        tpool = ThreadPoolPtr(new ThreadPool(1, worker, &td));
 
         cout << "CMS<GO> 'stdin' edition ready!" << endl;
     }
@@ -51,7 +50,7 @@ int main(int argc, char **argv) {
 
         socket = SocketPtr(new Socket(port));
 
-        tpool = ThreadPoolPtr(new WorkThreadPool(1, worker, &td));
+        tpool = ThreadPoolPtr(new ThreadPool(1, worker, &td));
 
         cout << "CMS<GO> 'single socket on port " << port
              << "' edition ready!" << endl;
