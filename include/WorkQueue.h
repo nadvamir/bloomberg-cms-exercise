@@ -30,4 +30,6 @@ public:
     void reportDone();
 };
 
+#include "include/WorkQueue.impl.h"
+
 #endif
