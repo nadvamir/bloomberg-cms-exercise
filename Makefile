@@ -65,7 +65,7 @@ clean :
 
 ####### BUILD TARGETS ########################################
 OBJECTS = Dealer.o Commodity.o parsers.o Socket.o Chanel.o \
-		  OrderStore.o
+		  OrderStore.o WorkQueue.o
 
 parsers.o: src/parsers.cpp include/parsers.h \
 		include/Command.h \
@@ -87,6 +87,9 @@ Commodity.o: src/Commodity.cpp include/Commodity.h
 
 Dealer.o: src/Dealer.cpp include/Dealer.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/Dealer.cpp -o $@
+
+WorkQueue.o: src/WorkQueue.cpp include/WorkQueue.h
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/WorkQueue.cpp -o $@
 
 OrderStore.o: src/OrderStore.cpp include/OrderStore.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c src/OrderStore.cpp -o $@
