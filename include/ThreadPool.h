@@ -14,6 +14,9 @@ typedef void* (*WORK_F)(void*);
 class ThreadPool {
     std::vector<pthread_t> tpool;
 public:
+    ThreadPool() {
+        // no threads at all
+    }
     ThreadPool(int size, WORK_F workF, void* data) : tpool(size) {
         for (int i = 0; i < size; ++i) {
             if (pthread_create(&tpool[i], NULL, workF, data)) {
@@ -25,6 +28,11 @@ public:
     void join() {
         std::for_each(tpool.begin(), tpool.end(),
                       std::bind2nd(std::ptr_fun(pthread_join), NULL));
+    }
+
+    void cancel() {
+        std::for_each(tpool.begin(), tpool.end(),
+                      std::ptr_fun(pthread_cancel));
     }
 };
 
