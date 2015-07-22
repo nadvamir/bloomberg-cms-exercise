@@ -13,12 +13,22 @@
 #include "include/Socket.h"
 #include "include/SharedPtr.h"
 #include "include/WorkQueue.h"
+#include "include/ThreadPool.h"
 
 using namespace std;
 
 typedef WorkQueue<ChanelPtr> Queue;
 typedef SharedPtr<Queue> QueuePtr;
 
+struct ThreadData {
+    QueuePtr q;
+    OrderStorePtr store;
+};
+
+typedef ThreadPool<ThreadData> WorkThreadPool;
+typedef SharedPtr<WorkThreadPool> ThreadPoolPtr;
+
+void* worker(void*);
 void processConnections(QueuePtr& q, OrderStorePtr& store);
 void processConnection(ChanelPtr& chanel, OrderStorePtr& store);
 
@@ -26,9 +36,13 @@ int main(int argc, char **argv) {
     QueuePtr workQueue(new Queue());
     OrderStorePtr store(new OrderStore());
     SocketPtr socket;
+    ThreadPoolPtr tpool;
+    ThreadData td = { workQueue, store };
 
     if (2 == argc && "base" == string(argv[1])) {
         workQueue->push(ChanelPtr(new StreamChanel(cin, cout)));
+        tpool = ThreadPoolPtr(new WorkThreadPool(1, worker, &td));
+
         cout << "CMS<GO> 'stdin' edition ready!" << endl;
     }
     else if (3 == argc && "ext1" == string(argv[1])) {
@@ -36,6 +50,8 @@ int main(int argc, char **argv) {
         int port; ss >> port;
 
         socket = SocketPtr(new Socket(port));
+
+        tpool = ThreadPoolPtr(new WorkThreadPool(1, worker, &td));
 
         cout << "CMS<GO> 'single socket on port " << port
              << "' edition ready!" << endl;
@@ -52,9 +68,15 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    processConnections(workQueue, store);
+    tpool->join();
 
     return 0;
+}
+
+void* worker(void* data) {
+    ThreadData* td = reinterpret_cast<ThreadData*>(data);
+    processConnections(td->q, td->store);
+    return NULL;
 }
 
 void processConnections(QueuePtr& q, OrderStorePtr& store) {
