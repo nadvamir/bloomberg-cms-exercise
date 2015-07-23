@@ -23,21 +23,28 @@ SharedPtr<T>& SharedPtr<T, TS>::operator=(const SharedPtr<T>& sptr) {
 // thread-safe non-inline functions
 //-----------------------------------------------------------------
 template<class T>
-SharedPtr<T, THREAD_SAFE>& SharedPtr<T, THREAD_SAFE>::operator=(
-        const SharedPtr<T, THREAD_SAFE>& sptr) {
+void SharedPtr<T, THREAD_SAFE>::enforceCleanup() {
     if (NULL != refCount_) {
+        bool lastRef = false;
         {
             Lock lock(mutex_);
             --(*refCount_);
+            lastRef = 0 == *refCount_;
         }
 
-        if (0 == *refCount_) { // won't go below 0, no lock needed
+        if (lastRef) {
             delete ptr_;
             delete refCount_;
             pthread_mutex_destroy(mutex_);
             delete mutex_;
         }
     }
+}
+
+template<class T>
+SharedPtr<T, THREAD_SAFE>& SharedPtr<T, THREAD_SAFE>::operator=(
+        const SharedPtr<T, THREAD_SAFE>& sptr) {
+    enforceCleanup();
 
     ptr_ = sptr.ptr_;
     refCount_ = sptr.refCount_;
@@ -48,23 +55,6 @@ SharedPtr<T, THREAD_SAFE>& SharedPtr<T, THREAD_SAFE>::operator=(
     }
 
     return *this;
-}
-
-template <class T>
-SharedPtr<T, THREAD_SAFE>::~SharedPtr() {
-    if (NULL != refCount_) {
-        {
-            Lock lock(mutex_);
-            --(*refCount_);
-        }
-
-        if (0 == *refCount_) {
-            delete ptr_;
-            delete refCount_;
-            pthread_mutex_destroy(mutex_);
-            delete mutex_;
-        }
-    }
 }
 
 template <class T>

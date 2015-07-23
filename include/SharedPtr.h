@@ -92,10 +92,14 @@ public:
         }
     }
 
+    ~SharedPtr() {
+        enforceCleanup();
+    }
+
+    void enforceCleanup();
+
     SharedPtr<T, THREAD_SAFE>&
     operator=(const SharedPtr<T, THREAD_SAFE>& sptr);
-
-    ~SharedPtr();
 
     ReferenceType operator*() const { return *ptr_; }
 
